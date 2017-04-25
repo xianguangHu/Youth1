@@ -1,0 +1,16 @@
+<com.zhy.autolayout.AutoLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.yuntian.youth.My.view.MyFragment">
+
+    <ImageView
+        android:layout_marginTop="300px"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/my_fragment_iv"
+        android:layout_width="300px"
+        android:layout_height="300px"/>
+
+</com.zhy.autolayout.AutoLinearLayout>
