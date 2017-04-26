@@ -1,10 +1,12 @@
 package com.yuntian.youth.dynamic.presenter;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
+import com.yuntian.youth.My.service.MyService;
 import com.yuntian.youth.dynamic.api.GDLBSApi;
 import com.yuntian.youth.dynamic.model.CreateResults;
 import com.yuntian.youth.dynamic.model.Dynamic;
@@ -14,10 +16,15 @@ import com.yuntian.youth.global.Constant;
 import com.yuntian.youth.register.model.bean.User;
 import com.yuntian.youth.widget.RxSubscribe;
 
+import java.io.File;
+
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.listener.ProgressCallback;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+import top.zibin.luban.Luban;
 
 
 /**
@@ -26,8 +33,9 @@ import rx.schedulers.Schedulers;
 
 public class ReleasePresenter extends MvpBasePresenter<ReleaseView> {
     private String mLbsid;
+    private BmobFile mBmobFile;
 
-    public void send(final String content, String coordinates, Context context) {
+    public void send(final String content, String coordinates, final Context context, final String path) {
         String json = "{'_name':'" + User.getCurrentUser().getUsername() + "','_location':'" + coordinates + "'}";
         JsonObject data = new JsonParser().parse(json).getAsJsonObject();
         //将经纬度信息保存到高德LBS云图中
@@ -42,12 +50,52 @@ public class ReleasePresenter extends MvpBasePresenter<ReleaseView> {
                         return Observable.just(createResults.get_id());
                     }
                 })
-                .flatMap(new Func1<String, Observable<String>>() {
+                .all(new Func1<String, Boolean>() {
                     @Override
-                    public Observable<String> call(String s) {
+                    public Boolean call(String s) {
                         mLbsid = s;
+                        if (TextUtils.isEmpty(path)){
+                            return false;
+                        }
+                        return true;
+                    }
+                })
+                .flatMap(new Func1<Boolean, Observable<File>>() {
+                    @Override
+                    public Observable<File> call(Boolean aBoolean) {
+                        if (aBoolean){
+                            return Luban.get(context).load(new File(path)).putGear(Luban.THIRD_GEAR).asObservable();
+                        }
+                        File file=null;
+                        return Observable.just(file);
+                    }
+                })
+                .flatMap(new Func1<File, Observable<Void>>() {
+                    @Override
+                    public Observable<Void> call(File file) {
+                        if (file!=null){
+                            mBmobFile = new BmobFile(file);
+                            Observable<Void> observable=mBmobFile.uploadObservable(new ProgressCallback() {
+                                @Override
+                                public void onProgress(Integer integer, long l) {
+
+                                }
+                            });
+                            return observable;
+                        }
+                        Void v=null;
+                        return Observable.just(v);
+                    }
+                })
+                .flatMap(new Func1<Void, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(Void aVoid) {
                         //创建dynamic数据
-                        return ReleaseService.createDynamic(content);
+                        String uri=null;
+                        if (mBmobFile!=null){
+                            uri=mBmobFile.getFileUrl();
+                        }
+                        return ReleaseService.createDynamic(content,uri);
                     }
                 })
                 .flatMap(new Func1<String, Observable<Dynamic>>() {
@@ -64,11 +112,23 @@ public class ReleasePresenter extends MvpBasePresenter<ReleaseView> {
                         return ReleaseService.createDynamicLocation(mLbsid, dynamic);
                     }
                 })
+                .flatMap(new Func1<String, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(String s) {
+                        if (mBmobFile!=null){
+                            return MyService.saveFile(mBmobFile.getFileUrl(),mBmobFile.getUrl());
+                        }
+                        return Observable.just("1");
+                    }
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new RxSubscribe<String>(context, "提交中") {
                     @Override
                     protected void _onNext(String s) {
+                        if ("1".equals(s)){
+                            //文件保存失败
+                        }
                         //成功
                         if (getView() != null) {
                             getView().sendSuccess();

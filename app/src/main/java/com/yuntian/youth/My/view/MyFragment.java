@@ -16,12 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
-import com.squareup.picasso.Picasso;
 import com.yuntian.youth.My.presenter.MyPresenter;
 import com.yuntian.youth.My.view.callback.MyView;
 import com.yuntian.youth.R;
-import com.yuntian.youth.Utils.CircularImages;
 import com.yuntian.youth.Utils.ImageUtil;
 import com.yuntian.youth.global.Constant;
 import com.yuntian.youth.register.model.bean.User;
@@ -32,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -80,9 +80,9 @@ public class MyFragment extends MvpFragment<MyView,MyPresenter> implements MyVie
     private void initView() {
         Uri uri = Uri.parse(User.getCurrentUser().getHeadUri());
         if (uri!=null) {
-            Picasso.with(getActivity()).load(uri).transform(new CircularImages()).into(mMyFragmentIv);
+            Glide.with(getActivity()).load(uri).bitmapTransform(new CropCircleTransformation(getActivity())).into(mMyFragmentIv);
         }else {
-            Picasso.with(getActivity()).load(R.mipmap.sms1).transform(new CircularImages()).into(mMyFragmentIv);
+            Glide.with(getActivity()).load(R.mipmap.sms1).bitmapTransform(new CropCircleTransformation(getActivity())).into(mMyFragmentIv);
         }
     }
 
@@ -158,7 +158,7 @@ public class MyFragment extends MvpFragment<MyView,MyPresenter> implements MyVie
 
     @Override
     public void UpdateHeadSuccess(String uri) {
-        Picasso.with(getActivity()).load(Uri.parse(uri)).transform(new CircularImages()).into(mMyFragmentIv);
+        Glide.with(getActivity()).load(Uri.parse(uri)).bitmapTransform(new CropCircleTransformation(getActivity())).into(mMyFragmentIv);
     }
 
     @Override

@@ -18,10 +18,13 @@ public class ReleaseService {
      * @param content 内容
      * @return
      */
-    public static Observable<String> createDynamic(String content){
+    public static Observable<String> createDynamic(String content,String uri){
         Dynamic dynamic=new Dynamic();
         dynamic.setContent(content);
         dynamic.setUser(BmobUser.getCurrentUser(User.class));
+        if (uri!=null){
+            dynamic.setPhotoUri(uri);
+        }
         Observable<String> observable=dynamic.saveObservable();
         return observable;
     }
@@ -49,4 +52,5 @@ public class ReleaseService {
         return dynamic_location.saveObservable();
 
     }
+
 }

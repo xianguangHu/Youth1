@@ -16,6 +16,16 @@ public class Dynamic extends BmobObject {
 
     private User user;
 
+    private String photoUri;
+
+    public String getPhotoUri() {
+        return photoUri;
+    }
+
+    public void setPhotoUri(String photoUri) {
+        this.photoUri = photoUri;
+    }
+
     public User getUser() {
         return user;
     }
