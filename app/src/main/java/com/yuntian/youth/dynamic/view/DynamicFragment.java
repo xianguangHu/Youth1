@@ -12,11 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationListener;
+import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 import com.yuntian.youth.R;
-import com.yuntian.youth.Utils.LoctionUtils;
 import com.yuntian.youth.dynamic.adapter.DynamicRecycleAdapter;
+import com.yuntian.youth.dynamic.model.Dynamic;
+import com.yuntian.youth.dynamic.presenter.DynamicPresenter;
+import com.yuntian.youth.dynamic.view.callback.DynamicView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
  * A simple {@link Fragment} subclass.
  * 动态展示
  */
-public class DynamicFragment extends Fragment {
+public class DynamicFragment extends MvpFragment<DynamicView,DynamicPresenter> implements DynamicView{
 
 
     @BindView(R.id.dynamic_related_ptr)
@@ -51,6 +52,11 @@ public class DynamicFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public DynamicPresenter createPresenter() {
+        return new DynamicPresenter();
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,9 +66,25 @@ public class DynamicFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 //        mEditTextBodyLl.bringToFront();
         mDynamicRelatedPtr.disableWhenHorizontalMove(true);
+        initView();
         initEvent();
         initRecyclerView();
         return view;
+
+    }
+
+    private void initView() {
+//        LoctionUtils.getLocation(new LoctionUtils.MyLocationListener() {
+//            @Override
+//            public void result(AMapLocation location) {
+//                Log.v("经纬度",location.getLatitude()+","+location.getLongitude()+"");
+//                try {
+//                    GDReieveService.QueryNear(getActivity(),location.getLongitude(),location.getLatitude());
+//                } catch (AMapException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
     }
 
     private void initRecyclerView() {
@@ -79,16 +101,19 @@ public class DynamicFragment extends Fragment {
     private void initEvent() {
         mDynamicRelatedPtr.setPtrHandler(new PtrDefaultHandler2() {
             @Override
-            public void onLoadMoreBegin(PtrFrameLayout frame) {
-
+            public void onLoadMoreBegin(PtrFrameLayout frame) {//底部加载
+                Log.v("=====","上拉");
             }
 
             @Override
-            public void onRefreshBegin(PtrFrameLayout frame) {
+            public void onRefreshBegin(PtrFrameLayout frame) {//下拉加载
+                Log.v("=====","下拉");
+
+                getPresenter().getData(getActivity());
 
             }
         });
-        mDynamicRelatedPtr.autoRefresh();
+//        mDynamicRelatedPtr.autoRefresh();
     }
 
     @Override
@@ -103,4 +128,12 @@ public class DynamicFragment extends Fragment {
         startActivity(new Intent(getActivity(),ReleaseActivity.class));
     }
 
+
+    @Override
+    public void update2loadData(List<Dynamic> datas) {
+        mDynamicRelatedPtr.refreshComplete();
+        if (datas!=null){
+            Log.v("=======",datas.size()+"'");
+        }
+    }
 }

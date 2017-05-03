@@ -23,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationListener;
 import com.bumptech.glide.Glide;
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 import com.jph.takephoto.app.TakePhoto;
@@ -61,7 +60,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
  */
 
 public class ReleaseActivity extends MvpActivity<ReleaseView, ReleasePresenter> implements CompoundButton.OnCheckedChangeListener,
-        Animation.AnimationListener, AMapLocationListener, ReleaseView, TakePhoto.TakeResultListener, InvokeListener {
+        Animation.AnimationListener, ReleaseView, TakePhoto.TakeResultListener, InvokeListener {
     @BindView(R.id.dynamic_release_title)
     TitleBar mDynamicReleaseTitle;
     @BindView(R.id.dynamic_release_iv)
@@ -99,7 +98,6 @@ public class ReleaseActivity extends MvpActivity<ReleaseView, ReleasePresenter> 
         setContentView(R.layout.activity_release);
         ButterKnife.bind(this);
         initView();
-        new LoctionUtils(this);
         StatusBarCompat.setStatusBarColor(false, this, getColor(R.color.green_main));
     }
 
@@ -122,6 +120,12 @@ public class ReleaseActivity extends MvpActivity<ReleaseView, ReleasePresenter> 
     }
 
     private void initView() {
+        LoctionUtils.getLocation(new LoctionUtils.MyLocationListener() {
+            @Override
+            public void result(AMapLocation location) {
+                mCoordinates=location.getLongitude()+","+location.getLatitude();
+            }
+        });
         mDynamicReleaseSwitch.setOnCheckedChangeListener(this);
         initTitle();
         Glide.with(this).load(Uri.parse(User.getCurrentUser().getHeadUri())).bitmapTransform(new CropCircleTransformation(this)).into(mDynamicReleaseIv);
@@ -188,21 +192,21 @@ public class ReleaseActivity extends MvpActivity<ReleaseView, ReleasePresenter> 
     }
 
 
-    @Override
-    public void onLocationChanged(AMapLocation aMapLocation) {
-        if (aMapLocation != null) {
-            if (aMapLocation.getErrorCode() == 0) {
-                //可在其中解析amapLocation获取相应内容。坐标  经度,纬度
-                mCoordinates = aMapLocation.getLongitude() + "," + aMapLocation.getLatitude();
-                Log.v("金纬度", mCoordinates);
-            } else {
-                //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
-                Log.e("AmapError=========", "location Error, ErrCode:"
-                        + aMapLocation.getErrorCode() + ", errInfo:"
-                        + aMapLocation.getErrorInfo());
-            }
-        }
-    }
+//    @Override
+//    public void onLocationChanged(AMapLocation aMapLocation) {
+//        if (aMapLocation != null) {
+//            if (aMapLocation.getErrorCode() == 0) {
+//                //可在其中解析amapLocation获取相应内容。坐标  经度,纬度
+//                mCoordinates = aMapLocation.getLongitude() + "," + aMapLocation.getLatitude();
+//                Log.v("金纬度", mCoordinates);
+//            } else {
+//                //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
+//                Log.e("AmapError=========", "location Error, ErrCode:"
+//                        + aMapLocation.getErrorCode() + ", errInfo:"
+//                        + aMapLocation.getErrorInfo());
+//            }
+//        }
+//    }
 
     @OnClick(R.id.dynamic_release_camera)
     public void onViewClicked() {

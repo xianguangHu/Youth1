@@ -1,68 +1,99 @@
 package com.yuntian.youth.Utils;
 
+import android.content.Context;
+
+import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-
-import static cn.bmob.v3.Bmob.getApplicationContext;
 
 /**
  * Created by huxianguang on 2017/4/24.
  */
 
 public class LoctionUtils {
-    //声明AMapLocationClient类对象
-    public AMapLocationClient mLocationClient = null;
-    //声明定位回调监听器
-//    public AMapLocationListener mLocationListener = new AMapLocationListener();
-    //声明AMapLocationClientOption对象
-    public AMapLocationClientOption mLocationOption = null;
-    public LoctionUtils(AMapLocationListener mLocationListener) {
-
-        //初始化定位
-        mLocationClient = new AMapLocationClient(getApplicationContext());
-            //设置定位回调监听
-        mLocationClient.setLocationListener(mLocationListener);
-
-        //初始化AMapLocationClientOption对象
+    private static AMapLocationClient mlocationClient;
+    public static AMapLocationClientOption mLocationOption = null;
+    public static AMapLocation sLocation = null;
+    /**
+     *
+     * @Title: init
+     * @Description: 初始化地图导航，在Application onCreate中调用，只需调用一次
+     * @param context
+     */
+    public static void init(Context context) {
+        // 声明mLocationOption对象
+        mlocationClient = new AMapLocationClient(context);
+        // 初始化定位参数
         mLocationOption = new AMapLocationClientOption();
-
-        //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
+        // 设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-
-        //获取一次定位结果：
-        //该方法默认为false。
-        mLocationOption.setOnceLocation(true);
-
-        //获取最近3s内精度最高的一次定位结果：
-        //设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)接口也会被设置为true，反之不会，默认为false。
-        mLocationOption.setOnceLocationLatest(true);
-
-        //设置是否返回地址信息（默认返回地址信息）
-        mLocationOption.setNeedAddress(false);
-
-        //设置是否强制刷新WIFI，默认为true，强制刷新。
-        mLocationOption.setWifiActiveScan(false);
-
-        //关闭缓存机制
-        mLocationOption.setLocationCacheEnable(false);
-
-        //给定位客户端对象设置定位参数
-        mLocationClient.setLocationOption(mLocationOption);
-        //启动定位
-        mLocationClient.startLocation();
+        // 设置定位间隔,单位毫秒,默认为2000ms
+        mLocationOption.setInterval(2000);
+        // 设置定位参数
+        mlocationClient.setLocationOption(mLocationOption);
+        // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
+        // 注意设置合适的定位时间的间隔（最小间隔支持为2000ms），并且在合适时间调用stopLocation()方法来取消定位请求
+        // 在定位结束后，在合适的生命周期调用onDestroy()方法
+        // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
     }
-
-    public  void Destroy(){
-        if (mLocationClient.isStarted()){
-            mLocationClient.onDestroy();//销毁定位客户端，同时销毁本地定位服务。
+    /**
+     *
+     * @ClassName: MyLocationListener
+     * @Description: 定位结果回调
+     *
+     */
+    public interface MyLocationListener {
+        public void result(AMapLocation location);
+    }
+    /**
+     *
+     * @Title: getLocation
+     * @Description: 获取位置，如果之前获取过定位结果，则不会重复获取
+     * @param listener
+     */
+    public static void getLocation(MyLocationListener listener) {
+        if (sLocation == null) {
+            getCurrentLocation(listener);
+        } else {
+            listener.result(sLocation);
         }
     }
-
-    public void stop(){
-        if (mLocationClient.isStarted()){
-            mLocationClient.stopLocation();//停止定位后，本地定位服务并不会被销毁
+    /**
+     *
+     * @Title: getCurrentLocation
+     * @Description: 获取位置，重新发起获取位置请求
+     * @param listener
+     */
+    public static void getCurrentLocation(final MyLocationListener listener) {
+        if (mlocationClient==null) {
+            return;
         }
-    }
+        // 设置定位监听
+        mlocationClient.setLocationListener(new AMapLocationListener() {
 
+            @Override
+            public void onLocationChanged(AMapLocation location) {
+                if (location != null) {
+                    //定位成功，取消定位
+                    mlocationClient.stopLocation();
+                    sLocation=location;
+                    listener.result(location);
+                }else {
+                    //获取定位数据失败
+                }
+            }
+        });
+        // 启动定位
+        mlocationClient.startLocation();
+    }
+    /**
+     *
+     * @Title: destroy
+     * @Description: 销毁定位，必须在退出程序时调用，否则定位会发生异常
+     */
+    public static void destroy() {
+        mlocationClient.onDestroy();
+    }
 }
+

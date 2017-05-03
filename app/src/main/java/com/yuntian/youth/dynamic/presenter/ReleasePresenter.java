@@ -2,6 +2,7 @@ package com.yuntian.youth.dynamic.presenter;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -141,6 +142,12 @@ public class ReleasePresenter extends MvpBasePresenter<ReleaseView> {
                         if (getView() != null) {
                             getView().sendErro(message);
                         }
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                        Log.v("=======","onCompleted");
                     }
                 });
     }

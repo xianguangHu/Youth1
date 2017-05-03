@@ -3,6 +3,7 @@ package com.yuntian.youth;
 import android.app.Application;
 import android.content.Context;
 
+import com.yuntian.youth.Utils.LoctionUtils;
 import com.yuntian.youth.global.Constant;
 
 import cn.bmob.sms.BmobSMS;
@@ -20,6 +21,7 @@ public class App extends Application {
         mContext=this;
         Bmob.initialize(this, Constant.APPLICATION_ID);
         BmobSMS.initialize(this,Constant.APPLICATION_ID);
+        LoctionUtils.init(this);
     }
     public static Context getContext(){
         return mContext;
