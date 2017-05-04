@@ -17,10 +17,12 @@ public class ReleaseService {
      * 保存动态信息
      * @param content 内容
      * @return
+     * @param isAnonymous 是否匿名  true 匿名
      */
-    public static Observable<String> createDynamic(String content,String uri){
+    public static Observable<String> createDynamic(String content,String uri,boolean isAnonymous){
         Dynamic dynamic=new Dynamic();
         dynamic.setContent(content);
+        dynamic.setAnonymous(isAnonymous);
         dynamic.setUser(BmobUser.getCurrentUser(User.class));
         if (uri!=null){
             dynamic.setPhotoUri(uri);

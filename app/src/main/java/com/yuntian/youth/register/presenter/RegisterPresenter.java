@@ -81,7 +81,7 @@ public class RegisterPresenter extends MvpBasePresenter<RegisterView>{
                     @Override
                     public void call(Throwable throwable) {
                         //验证码发送失败
-                        Log.v("错误", "'======");
+                        Log.v("错误",throwable.getMessage());
                     }
                 });
     }

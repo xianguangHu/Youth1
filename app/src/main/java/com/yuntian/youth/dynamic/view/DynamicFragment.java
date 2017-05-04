@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 import com.yuntian.youth.R;
 import com.yuntian.youth.dynamic.adapter.DynamicRecycleAdapter;
-import com.yuntian.youth.dynamic.model.Dynamic;
+import com.yuntian.youth.dynamic.model.DynamicDateil;
 import com.yuntian.youth.dynamic.presenter.DynamicPresenter;
 import com.yuntian.youth.dynamic.view.callback.DynamicView;
 
@@ -130,7 +130,7 @@ public class DynamicFragment extends MvpFragment<DynamicView,DynamicPresenter> i
 
 
     @Override
-    public void update2loadData(List<Dynamic> datas) {
+    public void update2loadData(List<DynamicDateil> datas) {
         mDynamicRelatedPtr.refreshComplete();
         if (datas!=null){
             Log.v("=======",datas.size()+"'");

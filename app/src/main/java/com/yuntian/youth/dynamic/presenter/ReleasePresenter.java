@@ -36,7 +36,7 @@ public class ReleasePresenter extends MvpBasePresenter<ReleaseView> {
     private String mLbsid;
     private BmobFile mBmobFile;
 
-    public void send(final String content, String coordinates, final Context context, final String path) {
+    public void send(final String content, String coordinates, final Context context, final String path, final Boolean isAnonymous) {
         String json = "{'_name':'" + User.getCurrentUser().getUsername() + "','_location':'" + coordinates + "'}";
         JsonObject data = new JsonParser().parse(json).getAsJsonObject();
         //将经纬度信息保存到高德LBS云图中
@@ -96,7 +96,7 @@ public class ReleasePresenter extends MvpBasePresenter<ReleaseView> {
                         if (mBmobFile!=null){
                             uri=mBmobFile.getFileUrl();
                         }
-                        return ReleaseService.createDynamic(content,uri);
+                        return ReleaseService.createDynamic(content,uri,isAnonymous);
                     }
                 })
                 .flatMap(new Func1<String, Observable<Dynamic>>() {

@@ -11,10 +11,12 @@ import com.amap.api.services.cloud.CloudSearch;
 import com.amap.api.services.core.AMapException;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.yuntian.youth.Utils.LoctionUtils;
+import com.yuntian.youth.dynamic.model.DynamicDateil;
 import com.yuntian.youth.dynamic.model.Dynamic_Location;
 import com.yuntian.youth.dynamic.service.DynamicService;
 import com.yuntian.youth.dynamic.service.GDReieveService;
 import com.yuntian.youth.dynamic.view.callback.DynamicView;
+import com.yuntian.youth.widget.RxSubscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,16 +27,25 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
+
 /**
  * Created by huxianguang on 2017/4/27.
+ *
  */
 
 public class DynamicPresenter extends MvpBasePresenter<DynamicView>{
+
+    //LBS本页总数
+    private int mNumber;
+    //索引
+    private int index=0;
+    private CloudResult mCloudResult;
+
     /**
      * 获取数据
      */
     public void getData(final Context context){
-
+                //mmb
                 Observable.create(new Observable.OnSubscribe<AMapLocation>() {
                     @Override
                     public void call(final Subscriber<? super AMapLocation> subscriber) {
@@ -64,6 +75,8 @@ public class DynamicPresenter extends MvpBasePresenter<DynamicView>{
                                         public void onCloudSearched(CloudResult cloudResult, int e) {
                                             //e为错误码  返回1000表示正常返回
                                             if(e==1000) {
+                                                mCloudResult = cloudResult;
+                                                mNumber = cloudResult.getClouds().size();
                                                 subscriber.onNext(cloudResult.getClouds());
                                             }else {
                                                 subscriber.onError(new Throwable("云图查询错误码" + e));
@@ -73,7 +86,7 @@ public class DynamicPresenter extends MvpBasePresenter<DynamicView>{
                                         @Override
                                         public void onCloudItemDetailSearched(CloudItemDetail cloudItemDetail, int e) {
 
-                                        }
+                                         }
                                     });
                                 } catch (AMapException e) {
                                     e.printStackTrace();
@@ -82,13 +95,13 @@ public class DynamicPresenter extends MvpBasePresenter<DynamicView>{
                         });
                     }
                 })
-                .concatMap(new Func1<ArrayList<CloudItem>, Observable<CloudItem>>() {
+                .flatMap(new Func1<ArrayList<CloudItem>, Observable<CloudItem>>() {
                     @Override
                     public Observable<CloudItem> call(ArrayList<CloudItem> cloudItems) {
                         return Observable.from(cloudItems);
                     }
                 })
-                .flatMap(new Func1<CloudItem, Observable<List<Dynamic_Location>>>() {
+                .concatMap(new Func1<CloudItem, Observable<List<Dynamic_Location>>>() {
                     @Override
                     public Observable<List<Dynamic_Location>> call(CloudItem cloudItem) {
                         //查询中间表数据
@@ -105,21 +118,25 @@ public class DynamicPresenter extends MvpBasePresenter<DynamicView>{
 //                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<List<Dynamic_Location>>() {
+                        .subscribe(new RxSubscribe<List<Dynamic_Location>>(context) {
+                            List<DynamicDateil> datas=new ArrayList<>();
                             @Override
-                            public void onCompleted() {
-                                Log.v("========","onCompleted");
+                            protected void _onNext(List<Dynamic_Location> dynamic_locations) {
+                                Log.v("=========","_onNext");
+                                DynamicDateil dynamicDateil=new DynamicDateil();
+                                dynamicDateil.setDynamic(dynamic_locations.get(0).getDynamic());
+                                dynamicDateil.setCloudItem(mCloudResult.getClouds().get(index));
+                                datas.add(dynamicDateil);
+                                index++;
+                                Log.v("=========",datas.size()+"");
+                                if (mNumber==datas.size()){
+                                    getView().update2loadData(datas);
+                                }
+
                             }
 
                             @Override
-                            public void onError(Throwable e) {
-                                Log.v("========","onError");
-
-                            }
-
-                            @Override
-                            public void onNext(List<Dynamic_Location> dynamic_locations) {
-                                Log.v("========","onNext");
+                            protected void _onError(String message) {
 
                             }
                         });

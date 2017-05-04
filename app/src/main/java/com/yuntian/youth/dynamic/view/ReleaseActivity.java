@@ -83,6 +83,7 @@ public class ReleaseActivity extends MvpActivity<ReleaseView, ReleasePresenter> 
     private String mCoordinates;
     private TakePhoto takePhoto;
     private InvokeParam invokeParam;
+    private boolean isAnonymous=false;
 
     private static final String TAG = TakePhotoActivity.class.getName();
 
@@ -147,7 +148,7 @@ public class ReleaseActivity extends MvpActivity<ReleaseView, ReleasePresenter> 
                 //内容不为空
                 String content = mDynamicReleaseContent.getText().toString();
                 if (!TextUtils.isEmpty(content) && !TextUtils.isEmpty(mCoordinates)) {
-                    getPresenter().send(content, mCoordinates, ReleaseActivity.this,mPath);
+                    getPresenter().send(content, mCoordinates, ReleaseActivity.this,mPath,isAnonymous);
                 }
             }
         });
@@ -156,6 +157,7 @@ public class ReleaseActivity extends MvpActivity<ReleaseView, ReleasePresenter> 
     //switch监听事件
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        isAnonymous=isChecked;
         if (isChecked) {
             //隐藏
             mDissAnimation = new AlphaAnimation(1, 0);

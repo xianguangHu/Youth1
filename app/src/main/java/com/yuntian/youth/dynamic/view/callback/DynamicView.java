@@ -1,7 +1,7 @@
 package com.yuntian.youth.dynamic.view.callback;
 
 import com.hannesdorfmann.mosby3.mvp.MvpView;
-import com.yuntian.youth.dynamic.model.Dynamic;
+import com.yuntian.youth.dynamic.model.DynamicDateil;
 
 import java.util.List;
 
@@ -10,5 +10,5 @@ import java.util.List;
  */
 
 public interface DynamicView extends MvpView{
-    void update2loadData(List<Dynamic> datas);
+    void update2loadData(List<DynamicDateil> datas);
 }
