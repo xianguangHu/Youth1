@@ -9,26 +9,7 @@ import cn.bmob.v3.BmobUser;
  */
 
 public class User extends BmobUser {
-//    @SerializedName("username")
-//    private String userName;
-////    @SerializedName("mobilePhoneNumber")
-////    private String phone;
-//
-//    public String getUserName() {
-//        return userName;
-//    }
-//
-//    public void setUserName(String userName) {
-//        this.userName = userName;
-//    }
 
-//    public String getPhone() {
-//        return phone;
-//    }
-//
-//    public void setPhone(String phone) {
-//        this.phone = phone;
-//    }
     @SerializedName("headUri")
     private String headUri;
 

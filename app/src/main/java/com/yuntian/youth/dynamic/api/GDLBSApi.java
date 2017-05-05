@@ -2,7 +2,7 @@ package com.yuntian.youth.dynamic.api;
 
 import com.google.gson.JsonObject;
 import com.socks.library.KLog;
-import com.yuntian.youth.dynamic.model.CreateResults;
+import com.yuntian.youth.dynamic.model.Results;
 import com.yuntian.youth.dynamic.service.GDLBSService;
 
 import java.io.IOException;
@@ -27,7 +27,15 @@ import rx.Observable;
  */
 
 public class GDLBSApi {
-        public static Observable<CreateResults> add(String key, String tableid, int type, JsonObject jsonObject){
+    /**
+     * 创建位置信息
+     * @param key
+     * @param tableid
+     * @param type
+     * @param jsonObject josn类型的数据
+     * @return
+     */
+        public static Observable<Results> add(String key, String tableid, int type, JsonObject jsonObject){
 
         OkHttpClient client =getheader().build();
         Retrofit retrofit=new Retrofit.Builder()
@@ -40,6 +48,24 @@ public class GDLBSApi {
         return service.addLocation(key,tableid,type,jsonObject);
     }
 
+    /**
+     *  跟新点赞数量
+     * @param key
+     * @param tableid
+     * @param jsonObject
+     * @return
+     */
+    public static Observable<Results> updateLikes(String key, String tableid, JsonObject jsonObject){
+        OkHttpClient client =getheader().build();
+        Retrofit retrofit=new Retrofit.Builder()
+                .client(client)
+                .baseUrl("http://yuntuapi.amap.com/")
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        GDLBSService service= retrofit.create(GDLBSService.class);
+        return service.updateLikes(key,tableid,jsonObject);
+    }
     public static OkHttpClient.Builder getheader(){
         OkHttpClient.Builder httpClient=new OkHttpClient.Builder()
         .addInterceptor(new Interceptor() {

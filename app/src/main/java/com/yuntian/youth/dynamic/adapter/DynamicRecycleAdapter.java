@@ -13,8 +13,8 @@ import com.yuntian.youth.R;
 import com.yuntian.youth.dynamic.adapter.holder.DynamicHolder;
 import com.yuntian.youth.dynamic.model.Dynamic;
 import com.yuntian.youth.dynamic.model.DynamicDateil;
-import com.yuntian.youth.dynamic.presenter.DynamicPresenter;
 import com.yuntian.youth.global.adapter.BaseRecycleViewAdapter;
+import com.yuntian.youth.register.view.callback.DynamicCallBack;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.CropTransformation;
@@ -26,10 +26,10 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class DynamicRecycleAdapter<T> extends BaseRecycleViewAdapter{
     private Context mContext;
-    private DynamicPresenter mPresenter;
-    public DynamicRecycleAdapter(Context context, DynamicPresenter presenter){
+    private DynamicCallBack mDynamicCallBack;
+    public DynamicRecycleAdapter(Context context, DynamicCallBack callBack){
         mContext=context;
-        mPresenter=presenter;
+        mDynamicCallBack=callBack;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class DynamicRecycleAdapter<T> extends BaseRecycleViewAdapter{
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         DynamicHolder dynamicHolder= (DynamicHolder) holder;
         final DynamicDateil dynamicDateil= (DynamicDateil) datas.get(position);
         Dynamic dynamic=dynamicDateil.getDynamic();
@@ -59,8 +59,6 @@ public class DynamicRecycleAdapter<T> extends BaseRecycleViewAdapter{
         //显示内容和照片
         dynamicHolder.mDynamicItemContent.setText(dynamic.getContent());
         //判断是否有照片 没有则隐藏
-
-
         if (dynamic.getPhotoUri()!=null) {
             dynamicHolder.mDynamicItemPhoto.setVisibility(View.VISIBLE);
             Glide.with(mContext).load(Uri.parse(dynamic.getPhotoUri()))
@@ -74,11 +72,13 @@ public class DynamicRecycleAdapter<T> extends BaseRecycleViewAdapter{
         dynamicHolder.mDynamicItemTime.setText(dynamic.getCreatedAt());
         dynamicHolder.mDynamicItemLocation.setText(cloudItem.getDistance()+" m");
 
+        //显示点赞数
+        dynamicHolder.mDynamicItemLikenumber.setText(dynamic.getLikes()+"");
         //点赞
         dynamicHolder.mDynamicItemIvOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DynamicPresenter().addLike(dynamicDateil);
+                mDynamicCallBack.addLike(dynamicDateil,position);
             }
         });
     }

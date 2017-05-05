@@ -1,7 +1,11 @@
 package com.yuntian.youth.dynamic.service;
 
+import android.util.Log;
+
 import com.yuntian.youth.dynamic.model.Dynamic;
 import com.yuntian.youth.dynamic.model.Dynamic_Location;
+import com.yuntian.youth.dynamic.model.Likes;
+import com.yuntian.youth.register.model.bean.User;
 
 import java.util.List;
 
@@ -34,6 +38,20 @@ public class DynamicService {
     public static Observable<Void> addLike(Dynamic dynamic){
         dynamic.increment("likes");
         Observable<Void> observable=dynamic.updateObservable(dynamic.getObjectId());
+        return observable;
+    }
+
+    /**
+     * 将点赞人和动态的信息保存到likes表中
+     * @param dynamicId
+     * @return
+     */
+    public static Observable<String> saveLikes(String dynamicId){
+        Likes likes=new Likes();
+            Log.v("======",User.getCurrentUser().getObjectId());
+        likes.setUserId(User.getCurrentUser().getObjectId());
+        likes.setDynamicId(dynamicId);
+        Observable<String> observable=likes.saveObservable();
         return observable;
     }
 }

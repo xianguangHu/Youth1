@@ -5,7 +5,7 @@ package com.yuntian.youth.dynamic.model;
  * 高德LBS云创建数据返回结果
  */
 
-public class CreateResults {
+public class Results {
     private String info;//错误码说明 成功返回OK
     private int status;//返回状态 1成功  0失败
     private String infocode; //错误码

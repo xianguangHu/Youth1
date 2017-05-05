@@ -79,6 +79,24 @@
             android:name="com.amap.api.v2.apikey"
             android:value="08fc9565065bf5e99e2686db054651e5"/>
         <service android:name="com.amap.api.location.APSService"/>
+
+
+        <!--<receiver android:name="cn.bmob.newim.core.ConnectChangeReceiver" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="cn.bmob.action.RECONNECT" />-->
+                <!--<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />-->
+                <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
+                <!--<action android:name="android.intent.action.USER_PRESENT" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+        <!--<service-->
+            <!--android:name="cn.bmob.newim.core.service.BmobIMService"-->
+            <!--android:process=":bmobcore" />-->
+        <!--<service-->
+            <!--android:name="cn.bmob.newim.core.service.NotifyService"-->
+            <!--android:process=":bmobcore" />-->
+        <!--<service android:name="cn.bmob.newim.core.service.ReConnectService" />-->
+        <!--<service android:name="cn.bmob.newim.core.service.HeartBeatService" />-->
     </application>
 
 </manifest>

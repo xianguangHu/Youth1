@@ -49,7 +49,10 @@ dependencies {
     compile('cn.bmob.android:bmob-sdk:3.5.0') {
         exclude group: 'classes'
     }
-    compile files('libs/BaiduLBS_Android.jar')
+    //bmob-im：特定版本的bmob-im依赖特定版本的bmob-sdk
+//    compile ('cn.bmob.android:bmob-im:2.0.6@aar'){
+//        exclude group: 'classes'
+//    }
     //KLog
     //bmob-sms ：Bmob单独为短信服务提供的包
     //文字跳动

@@ -21,6 +21,9 @@ public class Dynamic extends BmobObject {
     private Integer likes;
 
     public Integer getLikes() {
+        if (likes==null){
+            return 0;
+        }
         return likes;
     }
 

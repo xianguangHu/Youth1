@@ -9,7 +9,7 @@ import com.google.gson.JsonParser;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.yuntian.youth.My.service.MyService;
 import com.yuntian.youth.dynamic.api.GDLBSApi;
-import com.yuntian.youth.dynamic.model.CreateResults;
+import com.yuntian.youth.dynamic.model.Results;
 import com.yuntian.youth.dynamic.model.Dynamic;
 import com.yuntian.youth.dynamic.service.ReleaseService;
 import com.yuntian.youth.dynamic.view.callback.ReleaseView;
@@ -41,9 +41,9 @@ public class ReleasePresenter extends MvpBasePresenter<ReleaseView> {
         JsonObject data = new JsonParser().parse(json).getAsJsonObject();
         //将经纬度信息保存到高德LBS云图中
         GDLBSApi.add(Constant.GDLBS_KEY, Constant.GDYUN_ID, Constant.GDLOCTYPE, data)
-                .flatMap(new Func1<CreateResults, Observable<String>>() {
+                .flatMap(new Func1<Results, Observable<String>>() {
                     @Override
-                    public Observable<String> call(CreateResults createResults) {
+                    public Observable<String> call(Results createResults) {
                         if (0 == createResults.getStatus()) {//错误
                             return Observable.error(new Throwable("info:" + createResults.getInfo() + "+infocode:" + createResults.getInfocode()));
                         }

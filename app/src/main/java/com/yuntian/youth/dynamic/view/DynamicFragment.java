@@ -15,9 +15,11 @@ import android.view.ViewGroup;
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 import com.yuntian.youth.R;
 import com.yuntian.youth.dynamic.adapter.DynamicRecycleAdapter;
+import com.yuntian.youth.dynamic.model.Dynamic;
 import com.yuntian.youth.dynamic.model.DynamicDateil;
 import com.yuntian.youth.dynamic.presenter.DynamicPresenter;
 import com.yuntian.youth.dynamic.view.callback.DynamicView;
+import com.yuntian.youth.register.view.callback.DynamicCallBack;
 
 import java.util.List;
 
@@ -76,7 +78,17 @@ public class DynamicFragment extends MvpFragment<DynamicView,DynamicPresenter> i
     }
 
     private void initRecyclerView() {
-        mRecyclerAdapter = new DynamicRecycleAdapter(getActivity(),getPresenter());
+        mRecyclerAdapter = new DynamicRecycleAdapter(getActivity(), new DynamicCallBack() {
+            @Override
+            public void addLike(DynamicDateil dynamicDateil, int position) {
+                Log.v("DynamicFragment========","updateLike");
+                DynamicDateil dynamicDateil1= (DynamicDateil) mRecyclerAdapter.getDatas().get(position);
+                Dynamic dynamic=dynamicDateil1.getDynamic();
+                dynamic.setLikes(dynamic.getLikes()+1);
+                mRecyclerAdapter.notifyDataSetChanged();
+                getPresenter().addLike(dynamicDateil,position);
+            }
+        });
         mDynamicRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mDynamicRecycleView.setAdapter(mRecyclerAdapter);
     }
@@ -119,5 +131,14 @@ public class DynamicFragment extends MvpFragment<DynamicView,DynamicPresenter> i
             mRecyclerAdapter.setDatas(datas);
         }
         mRecyclerAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 跟新点赞ui
+     * @param position
+     */
+    @Override
+    public void updateLike(int position) {
+
     }
 }
