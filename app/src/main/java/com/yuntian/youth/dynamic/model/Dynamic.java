@@ -17,7 +17,16 @@ public class Dynamic extends BmobObject {
     private User user;
 
     private String photoUri;
-    private boolean isAnonymous;
+    private boolean isAnonymous;//匿名
+    private Integer likes;
+
+    public Integer getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Integer likes) {
+        this.likes = likes;
+    }
 
     public boolean isAnonymous() {
         return isAnonymous;

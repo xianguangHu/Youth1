@@ -19,7 +19,6 @@ import com.yuntian.youth.dynamic.model.DynamicDateil;
 import com.yuntian.youth.dynamic.presenter.DynamicPresenter;
 import com.yuntian.youth.dynamic.view.callback.DynamicView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -64,7 +63,6 @@ public class DynamicFragment extends MvpFragment<DynamicView,DynamicPresenter> i
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dynamic, container, false);
         unbinder = ButterKnife.bind(this, view);
-//        mEditTextBodyLl.bringToFront();
         mDynamicRelatedPtr.disableWhenHorizontalMove(true);
         initView();
         initEvent();
@@ -74,27 +72,12 @@ public class DynamicFragment extends MvpFragment<DynamicView,DynamicPresenter> i
     }
 
     private void initView() {
-//        LoctionUtils.getLocation(new LoctionUtils.MyLocationListener() {
-//            @Override
-//            public void result(AMapLocation location) {
-//                Log.v("经纬度",location.getLatitude()+","+location.getLongitude()+"");
-//                try {
-//                    GDReieveService.QueryNear(getActivity(),location.getLongitude(),location.getLatitude());
-//                } catch (AMapException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
+
     }
 
     private void initRecyclerView() {
-        mRecyclerAdapter = new DynamicRecycleAdapter();
+        mRecyclerAdapter = new DynamicRecycleAdapter(getActivity(),getPresenter());
         mDynamicRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        List<Integer> datas = new ArrayList();
-        for (int i = 0; i < 100; i++) {
-            datas.add(i);
-        }
-        mRecyclerAdapter.setDatas(datas);
         mDynamicRecycleView.setAdapter(mRecyclerAdapter);
     }
 
@@ -133,7 +116,8 @@ public class DynamicFragment extends MvpFragment<DynamicView,DynamicPresenter> i
     public void update2loadData(List<DynamicDateil> datas) {
         mDynamicRelatedPtr.refreshComplete();
         if (datas!=null){
-            Log.v("=======",datas.size()+"'");
+            mRecyclerAdapter.setDatas(datas);
         }
+        mRecyclerAdapter.notifyDataSetChanged();
     }
 }
