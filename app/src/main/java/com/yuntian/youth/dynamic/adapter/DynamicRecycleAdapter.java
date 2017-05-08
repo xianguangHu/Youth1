@@ -13,6 +13,7 @@ import com.yuntian.youth.R;
 import com.yuntian.youth.dynamic.adapter.holder.DynamicHolder;
 import com.yuntian.youth.dynamic.model.Dynamic;
 import com.yuntian.youth.dynamic.model.DynamicDateil;
+import com.yuntian.youth.global.Constant;
 import com.yuntian.youth.global.adapter.BaseRecycleViewAdapter;
 import com.yuntian.youth.register.view.callback.DynamicCallBack;
 
@@ -78,7 +79,36 @@ public class DynamicRecycleAdapter<T> extends BaseRecycleViewAdapter{
         dynamicHolder.mDynamicItemIvOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDynamicCallBack.addLike(dynamicDateil,position);
+                //先去判断是否已经点过赞 点过赞就不在执行
+                if (!dynamicDateil.isLike()) {
+                    dynamicDateil.setLike(true);
+                    //是否点过睬
+                    if (dynamicDateil.isUnLike()){
+                        dynamicDateil.setUnLike(false);
+                        //表示点过睬 在点赞就要加2
+                        mDynamicCallBack.addLike(Constant.LIKE_TYPE_TWO,dynamicDateil,position);
+                    }else {
+                        mDynamicCallBack.addLike(Constant.LIKE_TYPE_ONE,dynamicDateil,position);
+                    }
+                }
+            }
+        });
+        //睬
+        dynamicHolder.mDynamicItemivUnder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //判断是否点过睬  点过就表示不在执行
+                if (!dynamicDateil.isUnLike()){
+                    dynamicDateil.setUnLike(true);
+                    //判断是否点过赞  点过zan就减2
+                    if (dynamicDateil.isLike()){
+                        dynamicDateil.setLike(false);
+                        mDynamicCallBack.addLike(Constant.UNLIKE_TYPE_TWO,dynamicDateil,position);
+                    }else {
+                        //减一
+                        mDynamicCallBack.addLike(Constant.UNLIKE_TYPE_ONE,dynamicDateil,position);
+                    }
+                }
             }
         });
     }

@@ -10,6 +10,26 @@ public class DynamicDateil {
     private Dynamic dynamic;
     private CloudItem cloudItem;
 
+    private boolean isLike;//判断用户是否已经点过赞  false没有点过  true点过
+
+    private boolean isUnLike;//判断用户是否已经点过睬  false没有点过  true点过
+
+    public boolean isUnLike() {
+        return isUnLike;
+    }
+
+    public void setUnLike(boolean unLike) {
+        isUnLike = unLike;
+    }
+
+    public boolean isLike() {
+        return isLike;
+    }
+
+    public void setLike(boolean like) {
+        isLike = like;
+    }
+
     public CloudItem getCloudItem() {
         return cloudItem;
     }

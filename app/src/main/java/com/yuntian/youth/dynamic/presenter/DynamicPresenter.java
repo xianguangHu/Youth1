@@ -17,6 +17,7 @@ import com.yuntian.youth.dynamic.api.GDLBSApi;
 import com.yuntian.youth.dynamic.model.Dynamic;
 import com.yuntian.youth.dynamic.model.DynamicDateil;
 import com.yuntian.youth.dynamic.model.Dynamic_Location;
+import com.yuntian.youth.dynamic.model.Likes;
 import com.yuntian.youth.dynamic.model.Results;
 import com.yuntian.youth.dynamic.service.DynamicService;
 import com.yuntian.youth.dynamic.service.GDReieveService;
@@ -141,62 +142,69 @@ public class DynamicPresenter extends MvpBasePresenter<DynamicView> {
                 });
     }
 
-    public void addLike(final DynamicDateil dynamicDateil, final int position){
-        String json="{'_id':'"+dynamicDateil.getCloudItem().getID()+"','likes':"+dynamicDateil.getDynamic().getLikes()+1+"}";
-        Log.v("======",json);
-        final JsonObject data=new JsonParser().parse(json).getAsJsonObject();
-        //将dynamic表中的likes加1
-//        GDLBSApi.updateLikes(Constant.GDLBS_KEY,Constant.GDYUN_ID,data)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Action1<Results>() {
-//                    @Override
-//                    public void call(Results results) {
-//                        Log.v("======","success");
-//
-//                    }
-//                });
-        Dynamic dynamic=dynamicDateil.getDynamic();
-        if (dynamic!=null){
-            DynamicService.addLike(dynamic)
-                    .flatMap(new Func1<Void, Observable<String>>() {
-                        @Override
-                        public Observable<String> call(Void aVoid) {
-                            //将数据保存到点赞表
-                            return DynamicService.saveLikes(dynamicDateil.getDynamic().getObjectId());
+    /**
+     * 点赞
+     *
+     * @param dynamicDateil
+     * @param position
+     */
+    public void addLike(final int type, final DynamicDateil dynamicDateil, final int position) {
+        String json = "{'_id':'" + dynamicDateil.getCloudItem().getID() + "','likes':" + dynamicDateil.getDynamic().getLikes() + "}";
+        Log.v("======", json);
+        final Dynamic dynamic = dynamicDateil.getDynamic();
+        final JsonObject data = new JsonParser().parse(json).getAsJsonObject();
+        //将dynamic表中的likes跟新
+        GDLBSApi.updateLikes(Constant.GDLBS_KEY, Constant.GDYUN_ID, data)
+                .flatMap(new Func1<Results, Observable<List<Likes>>>() {
+                    @Override
+                    //查询
+                    public Observable<List<Likes>> call(Results results) {
+                        return DynamicService.QueryLikes(dynamic.getObjectId());
+                    }
+                })
+                .flatMap(new Func1<List<Likes>, Observable<?>>() {
+                    //删除
+                    @Override
+                    public Observable<?> call(List<Likes> likes) {
+                        if (likes.size()> 0) {
+                            return DynamicService.DeleteLikes(likes.get(0).getObjectId());
                         }
-                    })
-                    .flatMap(new Func1<String, Observable<Results>>() {
-                        @Override
-                        public Observable<Results> call(String s) {
-                            //跟新到LBS云上 赞加一
-                            return GDLBSApi.updateLikes(Constant.GDLBS_KEY,Constant.GDYUN_ID,data);
-                        }
-                    })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<Results>() {
-                        @Override
-                        public void call(Results results) {
-                            Log.v("======","success");
-                            if (0!=results.getStatus()){
-                                Log.v("======","返回成功");
+                        return Observable.just(1);
+                    }
+                })
+                //添加  原子计数器
+                .flatMap(new Func1<Object, Observable<Void>>() {
+                    @Override
+                    public Observable<Void> call(Object o) {
+                        return DynamicService.addLike(dynamic, type);
+                    }
+                })
+                //添加到likes表
+                .flatMap(new Func1<Void, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(Void aVoid) {
+                        //将数据保存到点赞表
+                        return DynamicService.saveLikes(dynamicDateil.getDynamic().getObjectId(), type);
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        Log.v("========", "保存到数据库");
+                        getView().updateLike(position);
 
-                            }
-                            //UI加一
-                            Log.v("======","jia1");
-                            if (getView()==null){
-                                Log.v("getView=====","null");
-                            }
-                            getView().updateLike(position);
-                        }
-                    }, new Action1<Throwable>() {
-                        @Override
-                        public void call(Throwable throwable) {
-                            Log.v("erro=====",throwable.getMessage());
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Log.v("erro=====", throwable.getMessage());
 
-                        }
-                    });
-        }
+                    }
+                });
+
     }
+
+
 }

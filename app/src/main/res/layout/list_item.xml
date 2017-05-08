@@ -71,6 +71,7 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:focusable="true"
                     android:id="@+id/dynamic_item_iv_on"
                     android:layout_width="100px"
                     android:layout_height="100px"
@@ -117,19 +118,19 @@
 
                 <TextView
                     android:id="@+id/dynamic_item_time"
-                    android:textSize="40px"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="40px"
-                    android:text="2017-12:21"/>
+                    android:text="2017-12:21"
+                    android:textSize="40px"/>
 
                 <TextView
                     android:id="@+id/dynamic_item_location"
-                    android:textSize="40px"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30px"
-                    android:text="300m"/>
+                    android:text="300m"
+                    android:textSize="40px"/>
             </com.zhy.autolayout.AutoLinearLayout>
 
             <View

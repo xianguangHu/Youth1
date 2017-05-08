@@ -7,5 +7,5 @@ import com.yuntian.youth.dynamic.model.DynamicDateil;
  */
 
 public interface DynamicCallBack {
-    void addLike(DynamicDateil dynamicDateil,int position);
+    void addLike(int type,DynamicDateil dynamicDateil,int position);
 }

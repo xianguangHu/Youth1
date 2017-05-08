@@ -33,10 +33,11 @@ public class DynamicService {
     /**
      *  点赞
      * @param dynamic
+     * @param type 点赞的个数
      * @return
      */
-    public static Observable<Void> addLike(Dynamic dynamic){
-        dynamic.increment("likes");
+    public static Observable<Void> addLike(Dynamic dynamic,int type){
+        dynamic.increment("likes",type);
         Observable<Void> observable=dynamic.updateObservable(dynamic.getObjectId());
         return observable;
     }
@@ -44,14 +45,39 @@ public class DynamicService {
     /**
      * 将点赞人和动态的信息保存到likes表中
      * @param dynamicId
+     * @param type 点赞数
      * @return
      */
-    public static Observable<String> saveLikes(String dynamicId){
+    public static Observable<String> saveLikes(String dynamicId,int type){
         Likes likes=new Likes();
             Log.v("======",User.getCurrentUser().getObjectId());
         likes.setUserId(User.getCurrentUser().getObjectId());
         likes.setDynamicId(dynamicId);
         Observable<String> observable=likes.saveObservable();
         return observable;
+    }
+
+    /**
+     * 查询likes
+     * @param dynamicId
+     * @return
+     */
+    public static Observable<List<Likes>> QueryLikes(String dynamicId){
+        BmobQuery<Likes> query=new BmobQuery<>();
+        query.addWhereEqualTo("dynamicId",dynamicId);
+        query.addWhereEqualTo("userId",User.getCurrentUser().getObjectId());
+        Observable<List<Likes>> observable=query.findObjectsObservable(Likes.class);
+        return observable;
+    }
+
+    /**
+     * 删除likes
+     * @param likesId
+     * @return
+     */
+    public static Observable<Void> DeleteLikes(String likesId){
+        Likes likes=new Likes();
+        likes.setObjectId(likesId);
+        return likes.deleteObservable(likesId);
     }
 }

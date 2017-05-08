@@ -17,4 +17,10 @@ public class Constant {
     public static final String GDYUN_ID="58feb01b2376c11620d1ce62";
     //高德位置属性type 1表示上传经纬度
     public static final int GDLOCTYPE=1;
+
+    //点赞和睬
+    public static final int LIKE_TYPE_ONE=1;
+    public static final int LIKE_TYPE_TWO=2;
+    public static final int UNLIKE_TYPE_ONE=-1;
+    public static final int UNLIKE_TYPE_TWO=-2;
 }

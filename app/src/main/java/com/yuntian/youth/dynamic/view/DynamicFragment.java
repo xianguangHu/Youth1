@@ -19,6 +19,7 @@ import com.yuntian.youth.dynamic.model.Dynamic;
 import com.yuntian.youth.dynamic.model.DynamicDateil;
 import com.yuntian.youth.dynamic.presenter.DynamicPresenter;
 import com.yuntian.youth.dynamic.view.callback.DynamicView;
+import com.yuntian.youth.global.Constant;
 import com.yuntian.youth.register.view.callback.DynamicCallBack;
 
 import java.util.List;
@@ -80,13 +81,26 @@ public class DynamicFragment extends MvpFragment<DynamicView,DynamicPresenter> i
     private void initRecyclerView() {
         mRecyclerAdapter = new DynamicRecycleAdapter(getActivity(), new DynamicCallBack() {
             @Override
-            public void addLike(DynamicDateil dynamicDateil, int position) {
+            public void addLike(int type,DynamicDateil dynamicDateil, int position) {
                 Log.v("DynamicFragment========","updateLike");
                 DynamicDateil dynamicDateil1= (DynamicDateil) mRecyclerAdapter.getDatas().get(position);
                 Dynamic dynamic=dynamicDateil1.getDynamic();
-                dynamic.setLikes(dynamic.getLikes()+1);
+                switch (type){
+                    case Constant.LIKE_TYPE_ONE://+1
+                        dynamic.setLikes(dynamic.getLikes()+1);
+                        break;
+                    case Constant.LIKE_TYPE_TWO://+2
+                        dynamic.setLikes(dynamic.getLikes()+2);
+                        break;
+                    case Constant.UNLIKE_TYPE_ONE://-1
+                        dynamic.setLikes(dynamic.getLikes()-1);
+                        break;
+                    case Constant.UNLIKE_TYPE_TWO://-2
+                        dynamic.setLikes(dynamic.getLikes()-2);
+                        break;
+                }
                 mRecyclerAdapter.notifyDataSetChanged();
-                getPresenter().addLike(dynamicDateil,position);
+                getPresenter().addLike(type,dynamicDateil,position);
             }
         });
         mDynamicRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
