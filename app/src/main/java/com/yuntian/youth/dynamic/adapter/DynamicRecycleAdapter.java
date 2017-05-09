@@ -2,21 +2,26 @@ package com.yuntian.youth.dynamic.adapter;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.amap.api.services.cloud.CloudItem;
 import com.bumptech.glide.Glide;
 import com.yuntian.youth.R;
-import com.yuntian.youth.dynamic.adapter.holder.DynamicHolder;
 import com.yuntian.youth.dynamic.model.Dynamic;
 import com.yuntian.youth.dynamic.model.DynamicDateil;
 import com.yuntian.youth.global.Constant;
 import com.yuntian.youth.global.adapter.BaseRecycleViewAdapter;
 import com.yuntian.youth.register.view.callback.DynamicCallBack;
+import com.zhy.autolayout.AutoLinearLayout;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.CropTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -28,6 +33,8 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 public class DynamicRecycleAdapter<T> extends BaseRecycleViewAdapter{
     private Context mContext;
     private DynamicCallBack mDynamicCallBack;
+    private OnItemClickListener onItemClickListener;
+
     public DynamicRecycleAdapter(Context context, DynamicCallBack callBack){
         mContext=context;
         mDynamicCallBack=callBack;
@@ -42,6 +49,7 @@ public class DynamicRecycleAdapter<T> extends BaseRecycleViewAdapter{
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         DynamicHolder dynamicHolder= (DynamicHolder) holder;
+        ((DynamicHolder) holder).setPosition(position);
         final DynamicDateil dynamicDateil= (DynamicDateil) datas.get(position);
         Dynamic dynamic=dynamicDateil.getDynamic();
         CloudItem cloudItem=dynamicDateil.getCloudItem();
@@ -119,4 +127,66 @@ public class DynamicRecycleAdapter<T> extends BaseRecycleViewAdapter{
     }
 
 
+    public static interface OnItemClickListener {
+        public void onItemClick(View view, boolean isLongClick,int postion);
+    }
+
+    public void setOnItemClickListener(final OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public class DynamicHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
+        @BindView(R.id.dynamic_item_headIv)
+        public ImageView mDynamicItemHeadIv;
+        @BindView(R.id.dynamic_item_username)
+        public TextView mDynamicItemUsername;
+        @BindView(R.id.dynamic_item_content)
+        public TextView mDynamicItemContent;
+        @BindView(R.id.dynamic_item_photo)
+        public ImageView mDynamicItemPhoto;
+        @BindView(R.id.dynamic_item_iv_on)
+        public ImageView mDynamicItemIvOn;
+        @BindView(R.id.dynamic_item_likenumber)
+        public TextView mDynamicItemLikenumber;
+        @BindView(R.id.dynamic_item_iv_under)
+        public ImageView mDynamicItemivUnder;
+        @BindView(R.id.dynamic_item_headll)
+        public AutoLinearLayout mDynamicItemHeadll;
+        @BindView(R.id.dynamic_item_time)
+        public TextView mDynamicItemTime;
+        @BindView(R.id.dynamic_item_location)
+        public TextView mDynamicItemLocation;
+        @BindView(R.id.dynamic_item_comment)
+        public ImageView mDynamicItemComment;
+        int mposition;
+
+        public DynamicHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            handleClick(v,false);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            return handleClick(v, true);
+        }
+
+        public void setPosition(int position){
+            mposition=position;
+        }
+        public boolean handleClick(View view,boolean isLongClick){
+            if (onItemClickListener!=null){
+                onItemClickListener.onItemClick(view,isLongClick,mposition);
+                return true;
+            }
+            return false;
+        }
+
+    }
 }

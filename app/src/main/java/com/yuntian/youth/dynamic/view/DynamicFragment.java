@@ -103,6 +103,17 @@ public class DynamicFragment extends MvpFragment<DynamicView,DynamicPresenter> i
                 getPresenter().addLike(type,dynamicDateil,position);
             }
         });
+        mRecyclerAdapter.setOnItemClickListener(new DynamicRecycleAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, boolean isLongClick,int postion) {
+                if (isLongClick) {
+                    Log.v("======","长按"+postion);
+                } else {
+                    Log.v("======","点击"+postion);
+
+                }
+            }
+        });
         mDynamicRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mDynamicRecycleView.setAdapter(mRecyclerAdapter);
     }
