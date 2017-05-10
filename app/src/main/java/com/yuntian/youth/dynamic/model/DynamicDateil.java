@@ -6,7 +6,7 @@ import com.amap.api.services.cloud.CloudItem;
  * Created by huxianguang on 2017/5/3.
  */
 
-public class DynamicDateil {
+public class DynamicDateil{
     private Dynamic dynamic;
     private CloudItem cloudItem;
 

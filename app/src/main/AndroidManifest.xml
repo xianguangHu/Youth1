@@ -75,6 +75,7 @@
         <activity android:name=".dynamic.view.ReleaseActivity"
                   android:windowSoftInputMode="stateVisible|adjustResize"/>
 
+        <activity android:name=".dynamic.view.DynamicDetailActivity"/>
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="08fc9565065bf5e99e2686db054651e5"/>

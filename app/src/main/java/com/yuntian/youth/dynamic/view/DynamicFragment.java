@@ -110,7 +110,15 @@ public class DynamicFragment extends MvpFragment<DynamicView,DynamicPresenter> i
                     Log.v("======","长按"+postion);
                 } else {
                     Log.v("======","点击"+postion);
-
+                    Intent intent=new Intent();
+                    intent.setClass(getActivity(),DynamicDetailActivity.class);
+                    Bundle bundle=new Bundle();
+                    DynamicDateil dynamicDateil= (DynamicDateil) mRecyclerAdapter.getDatas().get(postion);
+                    bundle.putSerializable("detail",dynamicDateil.getDynamic());
+                    intent.putExtras(bundle);
+                    Log.v("=",dynamicDateil.getCloudItem().getDistance()+"");
+                    intent.putExtra("locationDistance",dynamicDateil.getCloudItem().getDistance()+"");
+                    startActivity(intent);
                 }
             }
         });
