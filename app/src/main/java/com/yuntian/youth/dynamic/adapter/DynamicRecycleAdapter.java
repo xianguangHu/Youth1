@@ -1,7 +1,9 @@
 package com.yuntian.youth.dynamic.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.yuntian.youth.R;
 import com.yuntian.youth.dynamic.model.Dynamic;
 import com.yuntian.youth.dynamic.model.DynamicDateil;
+import com.yuntian.youth.dynamic.view.DynamicDetailActivity;
 import com.yuntian.youth.global.Constant;
 import com.yuntian.youth.global.adapter.BaseRecycleViewAdapter;
 import com.yuntian.youth.register.view.callback.DynamicCallBack;
@@ -51,8 +54,8 @@ public class DynamicRecycleAdapter<T> extends BaseRecycleViewAdapter{
         DynamicHolder dynamicHolder= (DynamicHolder) holder;
         ((DynamicHolder) holder).setPosition(position);
         final DynamicDateil dynamicDateil= (DynamicDateil) datas.get(position);
-        Dynamic dynamic=dynamicDateil.getDynamic();
-        CloudItem cloudItem=dynamicDateil.getCloudItem();
+        final Dynamic dynamic=dynamicDateil.getDynamic();
+        final CloudItem cloudItem=dynamicDateil.getCloudItem();
         //判断是否匿名 匿名就不显示邮箱和username并且影藏 true表示匿名
         if (!dynamic.isAnonymous()){
             dynamicHolder.mDynamicItemHeadll.setVisibility(View.VISIBLE);
@@ -117,6 +120,20 @@ public class DynamicRecycleAdapter<T> extends BaseRecycleViewAdapter{
                         mDynamicCallBack.addLike(Constant.UNLIKE_TYPE_ONE,dynamicDateil,position);
                     }
                 }
+            }
+        });
+
+        dynamicHolder.mDynamicItemComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(mContext, DynamicDetailActivity.class);
+                //true 直接打开键盘
+                intent.putExtra("isOpenBoard",true);
+                Bundle bundle=new Bundle();
+                bundle.putSerializable("detail",dynamic);
+                intent.putExtras(bundle);
+                intent.putExtra("locationDistance",cloudItem.getDistance()+"");
+                mContext.startActivity(intent);
             }
         });
     }

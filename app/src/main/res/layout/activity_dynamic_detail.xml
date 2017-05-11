@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <com.yuntian.youth.widget.TitleBar
@@ -112,4 +113,35 @@
                 android:textSize="40px"/>
         </com.zhy.autolayout.AutoLinearLayout>
     </com.zhy.autolayout.AutoLinearLayout>
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <in.srain.cube.views.ptr.PtrClassicFrameLayout
+        android:id="@+id/dynamic_detail_ptr"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        cube_ptr:ptr_duration_to_close="300"
+        cube_ptr:ptr_duration_to_close_header="2000"
+        cube_ptr:ptr_keep_header_when_refresh="true"
+        cube_ptr:ptr_pull_to_fresh="false"
+        cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
+        cube_ptr:ptr_resistance="1.7">
+
+        <android.support.v7.widget.RecyclerView
+
+            android:id="@+id/dynamic_detail_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="vertical"/>
+
+    </in.srain.cube.views.ptr.PtrClassicFrameLayout>
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            layout="@layout/layout_dynamic_comment_et"/>
+    </com.zhy.autolayout.AutoRelativeLayout>
 </com.zhy.autolayout.AutoLinearLayout>

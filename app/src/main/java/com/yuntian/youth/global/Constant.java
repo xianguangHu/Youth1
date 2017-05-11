@@ -23,4 +23,5 @@ public class Constant {
     public static final int LIKE_TYPE_TWO=2;
     public static final int UNLIKE_TYPE_ONE=-1;
     public static final int UNLIKE_TYPE_TWO=-2;
+
 }
