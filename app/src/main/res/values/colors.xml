@@ -6,4 +6,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="green_main">#FF1EB182</color>
     <color name="green_fragment">#22a484</color>
+    <color name="black">#000000</color>
+    <color name="comment_Divider">#e4e6ea</color>
 </resources>

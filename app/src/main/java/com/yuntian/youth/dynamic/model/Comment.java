@@ -10,7 +10,7 @@ import cn.bmob.v3.BmobObject;
 
 public class Comment extends BmobObject{
     public Comment(){
-        setTableName("Comment");
+        this.setTableName("Comment");
     }
     private User replyAuthor;//回复评论人的user
     private boolean isReply;//是否是回复类型

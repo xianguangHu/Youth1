@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class DynamicRecycleAdapter<T> extends BaseRecycleViewAdapter{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        Log.v("======","success");
         DynamicHolder dynamicHolder= (DynamicHolder) holder;
         ((DynamicHolder) holder).setPosition(position);
         final DynamicDateil dynamicDateil= (DynamicDateil) datas.get(position);

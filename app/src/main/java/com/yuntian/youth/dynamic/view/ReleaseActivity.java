@@ -129,6 +129,7 @@ public class ReleaseActivity extends MvpActivity<ReleaseView, ReleasePresenter> 
         });
         mDynamicReleaseSwitch.setOnCheckedChangeListener(this);
         initTitle();
+        //圆形
         Glide.with(this).load(Uri.parse(User.getCurrentUser().getHeadUri())).bitmapTransform(new CropCircleTransformation(this)).into(mDynamicReleaseIv);
         mDynamicReleaseName.setText(User.getCurrentUser().getUsername());
     }
@@ -194,21 +195,6 @@ public class ReleaseActivity extends MvpActivity<ReleaseView, ReleasePresenter> 
     }
 
 
-//    @Override
-//    public void onLocationChanged(AMapLocation aMapLocation) {
-//        if (aMapLocation != null) {
-//            if (aMapLocation.getErrorCode() == 0) {
-//                //可在其中解析amapLocation获取相应内容。坐标  经度,纬度
-//                mCoordinates = aMapLocation.getLongitude() + "," + aMapLocation.getLatitude();
-//                Log.v("金纬度", mCoordinates);
-//            } else {
-//                //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
-//                Log.e("AmapError=========", "location Error, ErrCode:"
-//                        + aMapLocation.getErrorCode() + ", errInfo:"
-//                        + aMapLocation.getErrorInfo());
-//            }
-//        }
-//    }
 
     @OnClick(R.id.dynamic_release_camera)
     public void onViewClicked() {
