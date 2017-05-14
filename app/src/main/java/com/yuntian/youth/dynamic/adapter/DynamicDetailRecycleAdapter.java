@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.yuntian.youth.R;
+import com.yuntian.youth.Utils.TimeUtil;
 import com.yuntian.youth.dynamic.adapter.holder.HeaderHolder;
 import com.yuntian.youth.dynamic.model.Comment;
 import com.yuntian.youth.dynamic.model.Dynamic;
@@ -99,7 +100,7 @@ public class DynamicDetailRecycleAdapter<T> extends BaseRecycleViewAdapter {
                 //没有照片
                 headerHolder.mDynamicDetailPhoto.setVisibility(View.GONE);
             }
-            headerHolder.mDynamicDetailTime.setText(mDynamic.getCreatedAt());
+            headerHolder.mDynamicDetailTime.setText(TimeUtil.timeLogic(mDynamic.getCreatedAt()));
             headerHolder.mDynamicDetailLocation.setText(mLocationDistance + " m");
             return;
         }
@@ -111,7 +112,7 @@ public class DynamicDetailRecycleAdapter<T> extends BaseRecycleViewAdapter {
             //圆形
             Glide.with(mContext).load(Uri.parse(comment.getAuthor().getHeadUri())).bitmapTransform(new CropCircleTransformation(mContext)).into(commentHolder.mCommentItemHeaderiv);
             commentHolder.mCommentItemUsername.setText(comment.getAuthor().getUsername());
-            commentHolder.mCommentItemTime.setText(comment.getCreatedAt());
+            commentHolder.mCommentItemTime.setText(TimeUtil.timeLogic(comment.getCreatedAt()));
 
     }
 
