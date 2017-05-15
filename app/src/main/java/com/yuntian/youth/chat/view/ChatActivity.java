@@ -14,8 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.exceptions.HyphenateException;
 import com.yuntian.youth.R;
 import com.yuntian.youth.Utils.stausbar.StatusBarCompat;
 import com.yuntian.youth.chat.adapter.ChatAdapter;
@@ -55,11 +53,7 @@ public class ChatActivity extends MvpActivity<ChatView,ChatPresenter> implements
         ButterKnife.bind(this);
         mUser = (User) getIntent().getSerializableExtra("User");
         initView();
-        try {
-            EMClient.getInstance().contactManager().addContact("4743ac82c0","hh");
-        } catch (HyphenateException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @NonNull
