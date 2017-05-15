@@ -25,7 +25,7 @@ public class DynamicService {
     public static Observable<List<Dynamic_Location>> QueryLbsToDynamic(String LbsId){
         BmobQuery<Dynamic_Location> bmobQuery=new BmobQuery();
         bmobQuery.addWhereEqualTo("lbsId",LbsId);
-        bmobQuery.include("dynamic,dynamic.user");
+        bmobQuery.include("dynamic.user");
         Observable<List<Dynamic_Location>> observable=bmobQuery.findObjectsObservable(Dynamic_Location.class);
         return observable;
     }

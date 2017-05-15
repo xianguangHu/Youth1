@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.amap.api.services.cloud.CloudItem;
 import com.bumptech.glide.Glide;
 import com.yuntian.youth.R;
+import com.yuntian.youth.chat.view.ChatActivity;
 import com.yuntian.youth.dynamic.model.Dynamic;
 import com.yuntian.youth.dynamic.model.DynamicDateil;
 import com.yuntian.youth.dynamic.view.DynamicDetailActivity;
@@ -135,6 +136,19 @@ public class DynamicRecycleAdapter<T> extends BaseRecycleViewAdapter{
                 bundle.putSerializable("detail",dynamic);
                 intent.putExtras(bundle);
                 intent.putExtra("locationDistance",cloudItem.getDistance()+"");
+                mContext.startActivity(intent);
+            }
+        });
+
+        //点击头像 聊天
+        dynamicHolder.mDynamicItemHeadIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent();
+                intent.setClass(mContext, ChatActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putSerializable("User",dynamic.getUser());
+                intent.putExtras(bundle);
                 mContext.startActivity(intent);
             }
         });

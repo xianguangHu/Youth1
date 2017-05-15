@@ -41,21 +41,12 @@ public class DynamicDetailActivity extends FragmentActivity{
         mLocationDistance = getIntent().getStringExtra("locationDistance");
         StatusBarCompat.setStatusBarColor(false, this, getColor(R.color.green_main));
         initView();
-
-
         getSupportFragmentManager().beginTransaction().replace(R.id.dynamic_detail_fragment, new DetailListFragment()).commitAllowingStateLoss();
     }
 
     private void initView() {
         initTitle();
     }
-
-
-
-
-
-
-
     private void initTitle() {
 
         mDynamicDetailTitle.setLeftImageResource(R.mipmap.left);
@@ -68,9 +59,6 @@ public class DynamicDetailActivity extends FragmentActivity{
         mDynamicDetailTitle.setTitle("详情");
         mDynamicDetailTitle.setTitleColor(Color.WHITE);
     }
-
-
-
 
     public boolean getIsOpenBoard(){
         return mIsOpenBoard;

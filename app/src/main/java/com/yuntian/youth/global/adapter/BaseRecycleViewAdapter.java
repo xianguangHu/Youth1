@@ -22,4 +22,5 @@ public abstract class BaseRecycleViewAdapter<T,VH extends RecyclerView.ViewHolde
         this.datas=datas;
     }
 
+
 }
