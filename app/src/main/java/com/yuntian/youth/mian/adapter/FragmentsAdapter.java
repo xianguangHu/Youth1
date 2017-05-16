@@ -21,7 +21,7 @@ public class FragmentsAdapter extends FragmentPagerAdapter {
     private List<Fragment> mFragmentList;
     private Context mContext;
     private int[] imageId={
-            R.mipmap.location_,R.mipmap.my
+            R.mipmap.location_,R.mipmap.chat,R.mipmap.my
     };
     public FragmentsAdapter(FragmentManager fm, List<Fragment> fragmentsList, Context context) {
         super(fm);

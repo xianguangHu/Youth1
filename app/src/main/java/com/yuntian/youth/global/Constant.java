@@ -24,4 +24,8 @@ public class Constant {
     public static final int UNLIKE_TYPE_ONE=-1;
     public static final int UNLIKE_TYPE_TWO=-2;
 
+    //及时通讯
+    public static final int CHAT_MESSAGE_TYPE_MY=1001;
+    public static final int CHAT_MESSAGE_TYPE_FRIENDS=1002;
+
 }

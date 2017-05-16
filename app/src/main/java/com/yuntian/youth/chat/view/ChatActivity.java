@@ -9,6 +9,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,10 +18,14 @@ import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 import com.yuntian.youth.R;
 import com.yuntian.youth.Utils.stausbar.StatusBarCompat;
 import com.yuntian.youth.chat.adapter.ChatAdapter;
+import com.yuntian.youth.chat.model.ChatItem;
 import com.yuntian.youth.chat.presenter.ChatPresenter;
 import com.yuntian.youth.chat.view.callback.ChatView;
+import com.yuntian.youth.global.Constant;
 import com.yuntian.youth.register.model.bean.User;
 import com.yuntian.youth.widget.TitleBar;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,7 +75,7 @@ public class ChatActivity extends MvpActivity<ChatView,ChatPresenter> implements
     }
 
     private void initRecycleView() {
-        mChatAdapter = new ChatAdapter();
+        mChatAdapter = new ChatAdapter(this);
         mChatRecycleView.setLayoutManager(new LinearLayoutManager(this));
         mChatRecycleView.setAdapter(mChatAdapter);
     }
@@ -89,15 +94,29 @@ public class ChatActivity extends MvpActivity<ChatView,ChatPresenter> implements
 
     @OnClick(R.id.chat_send)
     public void onViewClicked() {
+        Log.v("点击事件","========");
         String message=mChatEditView.getText().toString();
         if (!TextUtils.isEmpty(message)){
+            mChatEditView.setText("");
+            ChatItem chatItem=new ChatItem();
+            chatItem.setType(Constant.CHAT_MESSAGE_TYPE_MY);
+            chatItem.setMessageContent(message);
+            chatItem.setUser(User.getCurrentUser());
+            //第一时间去显示这条消息 如果消息发送失败在去展示
+            mChatAdapter.addChatItem(chatItem);
+            mChatAdapter.notifyDataSetChanged();
+            //发送消息
             getPresenter().sendMessage(message,mUser);
         }
     }
 
     @Override
     public void MessageSuccess(String message) {
-        mChatAdapter.addMessage(message);
+    }
+
+    @Override
+    public void MessageReceived(List<ChatItem> chatItems) {
+        mChatAdapter.getDatas().addAll(chatItems);
         mChatAdapter.notifyDataSetChanged();
     }
 }

@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.yuntian.youth.My.view.MyFragment;
 import com.yuntian.youth.R;
 import com.yuntian.youth.Utils.stausbar.StatusBarCompat;
+import com.yuntian.youth.chat.view.MessageFragment;
 import com.yuntian.youth.dynamic.view.DynamicFragment;
 import com.yuntian.youth.mian.adapter.FragmentsAdapter;
 
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFragment() {
         fragmentList.add(new DynamicFragment());
+        fragmentList.add(new MessageFragment());
         fragmentList.add(new MyFragment());
         setViewPagerAdapter();
     }

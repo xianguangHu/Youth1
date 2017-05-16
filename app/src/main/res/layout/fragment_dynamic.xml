@@ -9,46 +9,6 @@
     tools:context="com.yuntian.youth.dynamic.view.DynamicFragment">
 
 
-    <!--<com.zhy.autolayout.AutoRelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="150px"-->
-        <!--android:background="@color/green_fragment"-->
-        <!--android:id="@+id/autoRelativeLayout">-->
-
-        <!--<ImageView-->
-            <!--android:id="@+id/imageView"-->
-            <!--android:layout_width="100px"-->
-            <!--android:layout_height="100px"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginEnd="74dp"-->
-            <!--android:layout_marginRight="74dp"-->
-            <!--android:background="#ffffff"-->
-            <!--android:paddingBottom="10px"-->
-            <!--android:paddingLeft="10px"-->
-            <!--android:paddingRight="10px"-->
-            <!--android:paddingTop="10px"-->
-            <!--android:src="@mipmap/time"-->
-            <!--/>-->
-
-        <!--<ImageView-->
-            <!--android:id="@+id/imageView2"-->
-            <!--android:layout_width="100px"-->
-            <!--android:layout_height="100px"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_alignTop="@+id/imageView"-->
-            <!--android:layout_marginEnd="22dp"-->
-            <!--android:layout_marginRight="22dp"-->
-            <!--android:background="#ffffff"-->
-            <!--android:paddingBottom="10px"-->
-            <!--android:paddingLeft="10px"-->
-            <!--android:paddingRight="10px"-->
-            <!--android:paddingTop="10px"-->
-            <!--android:src="@mipmap/hot"/>-->
-    <!--</com.zhy.autolayout.AutoRelativeLayout>-->
-
 
     <!--
     ptr:ptr_duration_to_close_either：头部和底部回弹时间
@@ -80,22 +40,6 @@
 
 
     </in.srain.cube.views.ptr.PtrClassicFrameLayout>
-
-
-    <!--<include-->
-        <!--android:layout_gravity="bottom"-->
-        <!--layout="@layout/dynamic_editview"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="200px"-->
-
-        <!--/>-->
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="300px"-->
-        <!--android:id="@+id/textView"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:background="#000000"-->
-        <!--android:text="hahahahhahahahaahhh"/>-->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/dynamic_release"

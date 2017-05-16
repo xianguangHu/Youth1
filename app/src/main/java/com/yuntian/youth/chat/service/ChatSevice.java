@@ -12,7 +12,7 @@ public class ChatSevice {
         //创建一条文本信息
         EMMessage message=EMMessage.createTxtSendMessage(content,toChatUsername);
         //如果是群聊，设置chattype，默认是单聊
-        message.setChatType(EMMessage.ChatType.GroupChat);
+//        message.setChatType(EMMessage.ChatType.GroupChat);
         EMClient.getInstance().chatManager().sendMessage(message);
     }
 }
