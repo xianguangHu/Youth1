@@ -13,4 +13,5 @@ public interface ChatView extends MvpView{
     void MessageSuccess(String message);
 
     void MessageReceived(List<ChatItem> chatItems);
+    void LoadMoreSuccess(List<ChatItem> chatItems);
 }

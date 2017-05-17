@@ -1,5 +1,6 @@
 package com.yuntian.youth.chat.model;
 
+import com.hyphenate.chat.EMMessage;
 import com.yuntian.youth.register.model.bean.User;
 
 /**
@@ -10,8 +11,27 @@ import com.yuntian.youth.register.model.bean.User;
 public class ChatItem {
     private int type;
 
-    private String messageContent;
     private User user;
+
+    private EMMessage mEMMessage;
+
+    private String context;
+
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
+    }
+
+    public EMMessage getEMMessage() {
+        return mEMMessage;
+    }
+
+    public void setEMMessage(EMMessage EMMessage) {
+        mEMMessage = EMMessage;
+    }
 
     public User getUser() {
         return user;
@@ -19,14 +39,6 @@ public class ChatItem {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public String getMessageContent() {
-        return messageContent;
-    }
-
-    public void setMessageContent(String messageContent) {
-        this.messageContent = messageContent;
     }
 
     public int getType() {

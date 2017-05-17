@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.hyphenate.chat.EMTextMessageBody;
 import com.yuntian.youth.R;
 import com.yuntian.youth.chat.model.ChatItem;
 import com.yuntian.youth.global.Constant;
@@ -61,7 +62,12 @@ public class ChatAdapter extends BaseRecycleViewAdapter{
         Glide.with(mContext).load(Uri.parse(chatItem.getUser().getHeadUri()))
                 .bitmapTransform(new CropCircleTransformation(mContext)).into(chatHolder.mChatItemUserIv);
 
-        chatHolder.mChatItemMessgae.setText(chatItem.getMessageContent());
+        if (chatItem.getType()==Constant.CHAT_MESSAGE_TYPE_MY) {//自己的发的信息
+            chatHolder.mChatItemMessgae.setText(chatItem.getContext());
+        }else {
+            String context=((EMTextMessageBody)chatItem.getEMMessage().getBody()).getMessage();
+            chatHolder.mChatItemMessgae.setText(context);
+        }
     }
 
     @Override
