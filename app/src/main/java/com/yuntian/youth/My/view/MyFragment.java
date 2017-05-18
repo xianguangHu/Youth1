@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +20,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 import com.yuntian.youth.My.presenter.MyPresenter;
 import com.yuntian.youth.My.view.callback.MyView;
 import com.yuntian.youth.R;
+import com.yuntian.youth.Utils.DialogUtil;
 import com.yuntian.youth.Utils.ImageUtil;
 import com.yuntian.youth.global.Constant;
 import com.yuntian.youth.register.model.bean.User;
@@ -93,11 +93,9 @@ public class MyFragment extends MvpFragment<MyView,MyPresenter> implements MyVie
     }
     //
     private void showChoosePicDialog() {
-        AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
-        builder.setTitle("修改头像");
         String[] item={"选择本地图像","拍照"};
-        builder.setNegativeButton("取消",null);
-        builder.setItems(item, new DialogInterface.OnClickListener() {
+        String title="修改头像";
+        DialogUtil.showChoosePicDialog(getActivity(), item, title, new DialogUtil.showDialogCallBack() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){
@@ -119,7 +117,6 @@ public class MyFragment extends MvpFragment<MyView,MyPresenter> implements MyVie
                 }
             }
         });
-        builder.create().show();
     }
 
     @Override

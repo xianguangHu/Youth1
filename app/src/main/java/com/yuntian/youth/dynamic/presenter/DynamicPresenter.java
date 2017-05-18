@@ -12,6 +12,7 @@ import com.amap.api.services.core.AMapException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
+import com.yuntian.youth.Utils.CacheDataUtils;
 import com.yuntian.youth.Utils.LoctionUtils;
 import com.yuntian.youth.dynamic.api.GDLBSApi;
 import com.yuntian.youth.dynamic.model.Dynamic;
@@ -23,6 +24,7 @@ import com.yuntian.youth.dynamic.service.DynamicService;
 import com.yuntian.youth.dynamic.service.GDReieveService;
 import com.yuntian.youth.dynamic.view.callback.DynamicView;
 import com.yuntian.youth.global.Constant;
+import com.yuntian.youth.register.model.bean.User;
 import com.yuntian.youth.widget.RxSubscribe;
 
 import java.util.ArrayList;
@@ -207,4 +209,24 @@ public class DynamicPresenter extends MvpBasePresenter<DynamicView> {
     }
 
 
+    public void saveDynamicCachedata(final List<DynamicDateil> dynamicDateils, final Context context){
+        Observable.create(new Observable.OnSubscribe<Integer>() {
+            @Override
+            public void call(Subscriber<? super Integer> subscriber) {
+                List<Dynamic> dynamics=new ArrayList<>();
+                for (DynamicDateil dynamicDateil:dynamicDateils){
+                    dynamics.add(dynamicDateil.getDynamic());
+                }
+                CacheDataUtils.saveRecentDynamic(User.getCurrentUser().getObjectId(),dynamics,context);
+                subscriber.onNext(1);
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        Log.v("====","保存成功");
+                    }
+                });
+    }
 }

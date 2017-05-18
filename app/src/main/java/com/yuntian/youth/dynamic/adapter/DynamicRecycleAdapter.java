@@ -20,6 +20,7 @@ import com.yuntian.youth.chat.view.ChatActivity;
 import com.yuntian.youth.dynamic.model.Dynamic;
 import com.yuntian.youth.dynamic.model.DynamicDateil;
 import com.yuntian.youth.dynamic.view.DynamicDetailActivity;
+import com.yuntian.youth.dynamic.view.LoadImageActivity;
 import com.yuntian.youth.global.Constant;
 import com.yuntian.youth.global.adapter.BaseRecycleViewAdapter;
 import com.yuntian.youth.register.view.callback.DynamicCallBack;
@@ -80,6 +81,16 @@ public class DynamicRecycleAdapter<T> extends BaseRecycleViewAdapter{
                     .bitmapTransform(new CropTransformation(mContext, 1400, 500, CropTransformation.CropType.CENTER)
                     ,new RoundedCornersTransformation(mContext, 20, 0, RoundedCornersTransformation.CornerType.ALL))
                     .into(dynamicHolder.mDynamicItemPhoto);
+
+            //设置监听
+            dynamicHolder.mDynamicItemPhoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(mContext, LoadImageActivity.class);
+                    intent.putExtra("photoUri",dynamic.getPhotoUri());
+                    mContext.startActivity(intent);
+                }
+            });
         }else {
             //没有照片
             dynamicHolder.mDynamicItemPhoto.setVisibility(View.GONE);

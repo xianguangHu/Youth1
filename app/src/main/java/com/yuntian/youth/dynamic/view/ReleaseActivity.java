@@ -2,6 +2,9 @@ package com.yuntian.youth.dynamic.view;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,7 +12,6 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -36,6 +38,7 @@ import com.jph.takephoto.permission.InvokeListener;
 import com.jph.takephoto.permission.PermissionManager;
 import com.jph.takephoto.permission.TakePhotoInvocationHandler;
 import com.yuntian.youth.R;
+import com.yuntian.youth.Utils.DialogUtil;
 import com.yuntian.youth.Utils.LoctionUtils;
 import com.yuntian.youth.Utils.stausbar.StatusBarCompat;
 import com.yuntian.youth.dynamic.presenter.ReleasePresenter;
@@ -89,7 +92,11 @@ public class ReleaseActivity extends MvpActivity<ReleaseView, ReleasePresenter> 
 
     protected static final int CHOOSE_PICTURE = 0;//相册
     protected static final int TAKE_PICTURE = 1;//拍照
+
+    protected static final int PHOTO_DEKETE = 0;//删除照片
+    protected static final int PHOTO_PREVIEW = 1;//预览照片
     private String mPath;
+    private String mPhotoUri;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -132,7 +139,52 @@ public class ReleaseActivity extends MvpActivity<ReleaseView, ReleasePresenter> 
         //圆形
         Glide.with(this).load(Uri.parse(User.getCurrentUser().getHeadUri())).bitmapTransform(new CropCircleTransformation(this)).into(mDynamicReleaseIv);
         mDynamicReleaseName.setText(User.getCurrentUser().getUsername());
+
+        mDynamicReleasePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            showOperationDialog();
+            }
+        });
     }
+    //显示操作图片dialog
+    private void showOperationDialog() {
+        String[] item = {"删除照片", "预览大图"};
+        String title="操作";
+        DialogUtil.showChoosePicDialog(this, item, title, new DialogUtil.showDialogCallBack() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case PHOTO_DEKETE://删除
+                        if (mDynamicReleasePhoto.getVisibility()==View.VISIBLE){
+                            //回收资源
+                            releaseImageViewResouce(mDynamicReleasePhoto);
+                            //表示现在图片已经显示 将图片展示隐藏  拍照图标显示
+                            mDynamicReleasePhoto.setVisibility(View.GONE);
+                            //将拍照的图标隐藏
+                            mDynamicReleaseCamera.setVisibility(View.VISIBLE);
+                        }
+                        //清除glide内存缓存  在主线程中执行
+                        mDynamicReleasePhoto.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Glide.get(ReleaseActivity.this).clearMemory();
+                            }
+                        });
+                        mPhotoUri=null;
+                        break;
+                    case PHOTO_PREVIEW://预览
+                        if (mPhotoUri != null) {
+                            Intent intent = new Intent(ReleaseActivity.this, LoadImageActivity.class);
+                            intent.putExtra("photoUri", mPhotoUri);
+                            startActivity(intent);
+                        }
+                        break;
+                }
+            }
+        });
+    }
+
 
     private void initTitle() {
         mDynamicReleaseTitle.setLeftImageResource(R.mipmap.left);
@@ -211,12 +263,11 @@ public class ReleaseActivity extends MvpActivity<ReleaseView, ReleasePresenter> 
         Toast.makeText(this, e, Toast.LENGTH_SHORT).show();
     }
 
+    //显示拍照或者相册中选择dialog
     private void showChoosePicDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("上传照片");
         String[] item = {"选择本地图像", "拍照"};
-        builder.setNegativeButton("取消", null);
-        builder.setItems(item, new DialogInterface.OnClickListener() {
+        String title="上传照片";
+        DialogUtil.showChoosePicDialog(this, item, title, new DialogUtil.showDialogCallBack() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
@@ -233,17 +284,24 @@ public class ReleaseActivity extends MvpActivity<ReleaseView, ReleasePresenter> 
                 }
             }
         });
-        builder.create().show();
     }
 
     //takephoto
     @Override
     public void takeSuccess(TResult result) {
+        //显示照片
+        if (mDynamicReleasePhoto.getVisibility()==View.GONE){
+            //如果是隐藏状态就显示
+            mDynamicReleasePhoto.setVisibility(View.VISIBLE);
+            //将拍照的图标隐藏
+            mDynamicReleaseCamera.setVisibility(View.GONE);
+        }
         Log.i(TAG, "takeSuccess：" + result.getImage().getCompressPath());
         List<TImage> images = result.getImages();
         Log.v("路径", images.get(0).getOriginalPath());
         mPath = images.get(0).getOriginalPath();
-        Glide.with(this).load("file://"+images.get(0).getOriginalPath())
+        mPhotoUri = "file://"+images.get(0).getOriginalPath();
+        Glide.with(this).load(mPhotoUri)
                 .bitmapTransform(new CropTransformation(this,1300,500, CropTransformation.CropType.CENTER),new RoundedCornersTransformation(this, 20, 0, RoundedCornersTransformation.CornerType.ALL))
                 .into(mDynamicReleasePhoto);
     }
@@ -287,4 +345,15 @@ public class ReleaseActivity extends MvpActivity<ReleaseView, ReleasePresenter> 
         return type;
     }
 
+    public static void releaseImageViewResouce(ImageView imageView) {
+        if (imageView == null) return;
+        Drawable drawable = imageView.getDrawable();
+        if (drawable != null && drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            Bitmap bitmap = bitmapDrawable.getBitmap();
+            if (bitmap != null && !bitmap.isRecycled()) {
+                bitmap.recycle();
+            }
+        }
+    }
 }

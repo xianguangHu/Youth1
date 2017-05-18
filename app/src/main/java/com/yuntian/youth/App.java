@@ -1,14 +1,17 @@
 package com.yuntian.youth;
 
 import android.app.ActivityManager;
-import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 import com.yuntian.youth.Utils.LoctionUtils;
 import com.yuntian.youth.global.Constant;
+
+import org.litepal.LitePalApplication;
+import org.litepal.tablemanager.Connector;
 
 import java.util.Iterator;
 import java.util.List;
@@ -20,7 +23,7 @@ import cn.bmob.v3.Bmob;
  * Created by huxianguang on 2017/4/15.
  */
 
-public class App extends Application {
+public class App extends LitePalApplication {
     private static Context mContext;
 
     @Override
@@ -53,6 +56,8 @@ public class App extends Application {
         EMClient.getInstance().init(this, options);
         //在做打包混淆时，关闭debug模式，避免消耗不必要的资源
         EMClient.getInstance().setDebugMode(true);
+
+        SQLiteDatabase db = Connector.getDatabase();
     }
 
     public static Context getContext() {

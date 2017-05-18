@@ -157,6 +157,7 @@ public class DynamicFragment extends MvpFragment<DynamicView,DynamicPresenter> i
     }
 
 
+    //数据跟新完毕
     @Override
     public void update2loadData(List<DynamicDateil> datas) {
         mDynamicRelatedPtr.refreshComplete();
@@ -164,6 +165,8 @@ public class DynamicFragment extends MvpFragment<DynamicView,DynamicPresenter> i
             mRecyclerAdapter.setDatas(datas);
         }
         mRecyclerAdapter.notifyDataSetChanged();
+        //数据显示完毕的时候将数据保存到本地数据库 防止断网的时候不显示数据
+        getPresenter().saveDynamicCachedata(datas,getActivity());
     }
 
     /**
