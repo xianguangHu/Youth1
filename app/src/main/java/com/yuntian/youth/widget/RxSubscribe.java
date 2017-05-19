@@ -2,6 +2,9 @@ package com.yuntian.youth.widget;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.widget.Toast;
+
+import com.yuntian.youth.Utils.NetWorkUtils;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import rx.Subscriber;
@@ -68,6 +71,11 @@ public abstract class RxSubscribe<T> extends Subscriber<T> {
     }
     @Override
     public void onError(Throwable e) {
+        if (!NetWorkUtils.isAvailable(mContext)){
+            Toast.makeText(mContext,"网络不可用",Toast.LENGTH_SHORT).show();
+            _onError("网络不可用");
+            return;
+        }
         e.printStackTrace();
         _onError(e.getMessage());
         if (showDialog())

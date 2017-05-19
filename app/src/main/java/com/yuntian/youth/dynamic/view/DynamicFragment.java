@@ -74,6 +74,12 @@ public class DynamicFragment extends MvpFragment<DynamicView,DynamicPresenter> i
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPresenter().getDynamicCacheDate(getActivity());
+    }
+
     private void initView() {
 
     }
@@ -176,5 +182,11 @@ public class DynamicFragment extends MvpFragment<DynamicView,DynamicPresenter> i
     @Override
     public void updateLike(int position) {
 
+    }
+
+    @Override
+    public void getCacheSuccess(List<DynamicDateil> dynamicDateils) {
+        mRecyclerAdapter.setDatas(dynamicDateils);
+        mRecyclerAdapter.notifyDataSetChanged();
     }
 }

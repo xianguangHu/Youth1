@@ -96,8 +96,9 @@ public class DynamicRecycleAdapter<T> extends BaseRecycleViewAdapter{
             dynamicHolder.mDynamicItemPhoto.setVisibility(View.GONE);
         }
         dynamicHolder.mDynamicItemTime.setText(dynamic.getCreatedAt());
-        dynamicHolder.mDynamicItemLocation.setText(cloudItem.getDistance()+" m");
-
+        if (cloudItem!=null) {
+            dynamicHolder.mDynamicItemLocation.setText(cloudItem.getDistance() + " m");
+        }
         //显示点赞数
         dynamicHolder.mDynamicItemLikenumber.setText(dynamic.getLikes()+"");
         //点赞

@@ -12,4 +12,5 @@ import java.util.List;
 public interface DynamicView extends MvpView{
     void update2loadData(List<DynamicDateil> datas);
     void updateLike(int position);
+    void getCacheSuccess(List<DynamicDateil> dynamicDateils);
 }

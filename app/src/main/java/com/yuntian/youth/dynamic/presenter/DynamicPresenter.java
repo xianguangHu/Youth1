@@ -209,13 +209,24 @@ public class DynamicPresenter extends MvpBasePresenter<DynamicView> {
     }
 
 
+    /**
+     * 保存缓存
+     * @param dynamicDateils
+     * @param context
+     */
     public void saveDynamicCachedata(final List<DynamicDateil> dynamicDateils, final Context context){
         Observable.create(new Observable.OnSubscribe<Integer>() {
             @Override
             public void call(Subscriber<? super Integer> subscriber) {
-                List<Dynamic> dynamics=new ArrayList<>();
-                for (DynamicDateil dynamicDateil:dynamicDateils){
-                    dynamics.add(dynamicDateil.getDynamic());
+                List<Dynamic> dynamics=new ArrayList<Dynamic>();
+                if (dynamicDateils.size()>10){
+                    for (int i=0;i<10;i++){
+                        dynamics.add(dynamicDateils.get(i).getDynamic());
+                    }
+                }else {
+                    for (DynamicDateil dynamicDateil:dynamicDateils){
+                        dynamics.add(dynamicDateil.getDynamic());
+                    }
                 }
                 CacheDataUtils.saveRecentDynamic(User.getCurrentUser().getObjectId(),dynamics,context);
                 subscriber.onNext(1);
@@ -226,6 +237,32 @@ public class DynamicPresenter extends MvpBasePresenter<DynamicView> {
                     @Override
                     public void call(Integer integer) {
                         Log.v("====","保存成功");
+                    }
+                });
+    }
+
+    /**
+     * 在打开的时候显示上一次的记录
+     */
+    public void getDynamicCacheDate(final Context context){
+        Observable.create(new Observable.OnSubscribe<List<DynamicDateil>>() {
+            @Override
+            public void call(Subscriber<? super List<DynamicDateil>> subscriber) {
+                List<Dynamic> dynamics=CacheDataUtils.getRecentDyanmic(User.getCurrentUser().getObjectId(),context);
+                List<DynamicDateil> dynamicDateils=new ArrayList<DynamicDateil>();
+                for (Dynamic dynamic:dynamics){
+                    DynamicDateil dynamicDateil=new DynamicDateil();
+                    dynamicDateil.setDynamic(dynamic);
+                    dynamicDateils.add(dynamicDateil);
+                }
+                subscriber.onNext(dynamicDateils);
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<DynamicDateil>>() {
+                    @Override
+                    public void call(List<DynamicDateil> dynamicList) {
+                        getView().getCacheSuccess(dynamicList);
                     }
                 });
     }
