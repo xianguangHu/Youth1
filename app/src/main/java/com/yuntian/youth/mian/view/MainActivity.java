@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         StatusBarCompat.setStatusBarColor(false,this,getColor(R.color.green_main));
 //        StatusBarCompat.translucentStatusBar(this,true);
         initFragment();
+
     }
 
 

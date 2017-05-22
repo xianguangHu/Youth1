@@ -65,7 +65,7 @@ public class MyPresenter extends MvpBasePresenter<MyView> {
                         @Override
                         public Observable<Void> call(List<com.yuntian.youth.My.model.File> list) {
                             //将文件uri更新到用户表中
-                            if (list!=null){
+                            if (list.size()>0){
                                 //删除文件
                                 MyService.deleteHead(list);
                             }
