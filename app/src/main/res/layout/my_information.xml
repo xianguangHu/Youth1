@@ -12,6 +12,7 @@
         android:layout_height="1px"
         android:background="#8a8a8a"/>
     <com.zhy.autolayout.AutoRelativeLayout
+        android:id="@+id/my_information_data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -53,6 +54,7 @@
         android:background="#707070"/>
 
     <com.zhy.autolayout.AutoRelativeLayout
+        android:id="@+id/my_data_phone_number"
         android:padding="40px"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

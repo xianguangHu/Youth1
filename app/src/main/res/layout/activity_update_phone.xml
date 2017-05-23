@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <com.yuntian.youth.widget.TitleBar
+        android:id="@+id/update_phone_title"
+        android:layout_width="match_parent"
+        android:layout_height="180px"
+        android:background="@color/green_main"/>
+
+    <TextView
+        android:layout_marginTop="220px"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="你已绑定手机号码"
+        android:textColor="#515151"
+        android:textSize="60px"/>
+
+    <TextView
+        android:id="@+id/update_phone_number"
+        android:layout_marginTop="50px"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="138 ****** 00"
+        android:layout_gravity="center"
+        android:textSize="120px"
+        android:textColor="@color/black"/>
+
+    <Button
+        android:id="@+id/update_phone_btnupdate"
+        android:layout_marginTop="40px"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:layout_width="200px"
+        android:layout_height="130px"
+        android:text="更换"
+        android:textSize="55px"/>
+</com.zhy.autolayout.AutoLinearLayout>

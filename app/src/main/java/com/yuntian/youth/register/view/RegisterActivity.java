@@ -113,22 +113,6 @@ public class RegisterActivity extends MvpActivity<RegisterView, RegisterPresente
 
     @OnShowRationale({Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA})
     void showRationaleForRecord(final PermissionRequest request) {
-//        new AlertDialog.Builder(this)
-//                .setPositiveButton("好的", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        request.proceed();
-//                    }
-//                })
-//                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        request.cancel();
-//                    }
-//                })
-//                .setCancelable(false)
-//                .setMessage("应用将要申请电话权限,否则将不能正常使用!")
-//                .show();
         request.proceed();
     }
 

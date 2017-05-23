@@ -43,6 +43,7 @@ import com.yuntian.youth.Utils.LoctionUtils;
 import com.yuntian.youth.Utils.stausbar.StatusBarCompat;
 import com.yuntian.youth.dynamic.presenter.ReleasePresenter;
 import com.yuntian.youth.dynamic.view.callback.ReleaseView;
+import com.yuntian.youth.listener.impl.YouthListerenImpl;
 import com.yuntian.youth.register.model.bean.User;
 import com.yuntian.youth.widget.TitleBar;
 import com.zhy.autolayout.AutoLinearLayout;
@@ -151,9 +152,9 @@ public class ReleaseActivity extends MvpActivity<ReleaseView, ReleasePresenter> 
     private void showOperationDialog() {
         String[] item = {"删除照片", "预览大图"};
         String title="操作";
-        DialogUtil.showChoosePicDialog(this, item, title, new DialogUtil.showDialogCallBack() {
+        DialogUtil.showChoosePicDialog(this, item, title, new YouthListerenImpl() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void dialogCall(DialogInterface dialog, int which) {
                 switch (which){
                     case PHOTO_DEKETE://删除
                         if (mDynamicReleasePhoto.getVisibility()==View.VISIBLE){
@@ -267,9 +268,9 @@ public class ReleaseActivity extends MvpActivity<ReleaseView, ReleasePresenter> 
     private void showChoosePicDialog() {
         String[] item = {"选择本地图像", "拍照"};
         String title="上传照片";
-        DialogUtil.showChoosePicDialog(this, item, title, new DialogUtil.showDialogCallBack() {
+        DialogUtil.showChoosePicDialog(this, item, title, new YouthListerenImpl() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void dialogCall(DialogInterface dialog, int which) {
                 switch (which) {
                     case CHOOSE_PICTURE://相册
                         takePhoto.onEnableCompress(null, false);

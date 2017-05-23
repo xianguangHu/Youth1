@@ -112,6 +112,9 @@ dependencies {
     compile 'com.hyphenate:hyphenate-sdk:3.3.0'
     //litepal 数据库框架
     compile 'org.litepal.android:core:1.5.1'
+    //时间选择器
+    compile 'com.github.flavienlaurent.datetimepicker:library:0.0.2'
+    compile 'com.nineoldandroids:library:2.4.0'
 
 }
 

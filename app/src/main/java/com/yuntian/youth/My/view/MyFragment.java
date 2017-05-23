@@ -27,8 +27,10 @@ import com.yuntian.youth.R;
 import com.yuntian.youth.Utils.DialogUtil;
 import com.yuntian.youth.Utils.ImageUtil;
 import com.yuntian.youth.global.Constant;
+import com.yuntian.youth.listener.impl.YouthListerenImpl;
 import com.yuntian.youth.register.model.bean.User;
 import com.zhy.autolayout.AutoLinearLayout;
+import com.zhy.autolayout.AutoRelativeLayout;
 
 import java.io.File;
 
@@ -52,6 +54,10 @@ public class MyFragment extends MvpFragment<MyView, MyPresenter> implements MyVi
     private static final int ALPHA_ANIMATIONS_DURATION = 200;
     @BindView(R.id.my_fragment_username)
     TextView mMyFragmentUsername;
+    @BindView(R.id.my_information_data)
+    AutoRelativeLayout mMyInformationData;
+    @BindView(R.id.my_data_phone_number)
+    AutoRelativeLayout mMyDataPhoneNumber;
 
     private boolean mIsTheTitleVisible = false;
     private boolean mIsTheTitleContainerVisible = true;
@@ -115,25 +121,40 @@ public class MyFragment extends MvpFragment<MyView, MyPresenter> implements MyVi
         } else {
             Glide.with(getActivity()).load(R.mipmap.sms1).bitmapTransform(new CropCircleTransformation(getActivity())).into(mMyFragmentIv);
         }
-        String username=User.getCurrentUser().getUsername();
+        String username = User.getCurrentUser().getUsername();
         mMyFragmentTextviewTitle.setText(username);
         mMyFragmentUsername.setText(username);
 
     }
 
-    @OnClick(R.id.my_fragment_iv)
-    public void onViewClicked() {
-        //修改头像 弹出dialog
-        showChoosePicDialog();
+    @OnClick({R.id.my_fragment_iv, R.id.my_information_data,R.id.my_data_phone_number})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.my_fragment_iv:
+                //修改头像 弹出dialog
+                showChoosePicDialog();
+                break;
+
+            case R.id.my_information_data:
+                //编辑个人资料
+                Intent intent = new Intent(getActivity(), MyDataActivity.class);
+                getActivity().startActivity(intent);
+                break;
+            case R.id.my_data_phone_number:
+                //手机号
+                startActivity(new Intent(getActivity(),UpdatePhoneActivity.class));
+                break;
+        }
+
     }
 
     //
     private void showChoosePicDialog() {
         String[] item = {"选择本地图像", "拍照"};
         String title = "修改头像";
-        DialogUtil.showChoosePicDialog(getActivity(), item, title, new DialogUtil.showDialogCallBack() {
+        DialogUtil.showChoosePicDialog(getActivity(), item, title, new YouthListerenImpl() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void dialogCall(DialogInterface dialog, int which) {
                 switch (which) {
                     case CHOOSE_PICTURE://相册
                         Log.v("相册", "===");
@@ -259,4 +280,5 @@ public class MyFragment extends MvpFragment<MyView, MyPresenter> implements MyVi
         }
 
     }
+
 }

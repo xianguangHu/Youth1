@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.yuntian.youth.widget.TitleBar
+        android:id="@+id/replace_number_title"
+        android:layout_width="match_parent"
+        android:layout_height="180px"
+        android:background="@color/green_main"/>
+
+    <TextView
+        android:layout_marginTop="70px"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="请输入你要重新绑定的号码。"
+        android:layout_gravity="center"
+        android:textSize="60px"/>
+
+    <View
+        android:layout_marginTop="50px"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#8a8a8a"/>
+    <com.zhy.autolayout.AutoLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_marginLeft="50px"
+            android:padding="40px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="中国 +86"
+            android:textColor="@color/green_main"
+            android:textSize="80px"/>
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#8a8a8a"/>
+        <EditText
+            android:id="@+id/replace_number_editview"
+            android:layout_marginLeft="60px"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="75px"
+            android:textColor="@color/black"
+            android:background="@null"
+            android:inputType="number"
+            android:maxLength="11"
+            />
+    </com.zhy.autolayout.AutoLinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#8a8a8a"/>
+
+    <Button
+        android:id="@+id/replace_number_next"
+        android:layout_marginTop="120px"
+        android:layout_marginLeft="80px"
+        android:layout_marginRight="80px"
+        android:background="@color/green_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="下一步"
+        android:textSize="70px"
+        android:textColor="@color/white"/>
+</com.zhy.autolayout.AutoLinearLayout>

@@ -16,6 +16,11 @@ import rx.Observable;
 
 public class RegisterApi {
 
+    /**
+     * 查询当前手机号是否有人注册
+     * @param phone
+     * @return
+     */
     public static Observable<List<User>> getRegister(String phone){
         BmobQuery<User> query=new BmobQuery<>();
         query.addWhereEqualTo("mobilePhoneNumber",phone);

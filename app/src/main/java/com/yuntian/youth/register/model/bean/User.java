@@ -1,6 +1,7 @@
 package com.yuntian.youth.register.model.bean;
 
 import com.google.gson.annotations.SerializedName;
+import com.yuntian.youth.global.Constant;
 
 import cn.bmob.v3.BmobUser;
 
@@ -13,6 +14,48 @@ public class User extends BmobUser {
     @SerializedName("headUri")
     private String headUri;
 
+    @SerializedName("gender")
+    private Integer gender;
+
+    @SerializedName("age")
+    private String age;
+
+    @SerializedName("birthday")
+    private String birthday;
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getAge() {
+        if (age!=null) {
+            return age;
+        }
+        return "未填写";
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public String getGender() {
+        if (gender != null) {
+            if (Constant.GEBDER_MAN == gender) {
+                return "男";
+            } else if (Constant.GENDER_WOMAN == gender) {
+                return "女";
+            }
+        }
+        return "未填写";
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
 
     public String getHeadUri() {
         if (headUri == null) {
@@ -26,7 +69,7 @@ public class User extends BmobUser {
         this.headUri = headUri;
     }
 
-    public static User getCurrentUser(){
+    public static User getCurrentUser() {
         return BmobUser.getCurrentUser(User.class);
     }
 

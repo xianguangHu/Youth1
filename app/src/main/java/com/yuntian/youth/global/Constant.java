@@ -28,4 +28,7 @@ public class Constant {
     public static final int CHAT_MESSAGE_TYPE_MY=1001;
     public static final int CHAT_MESSAGE_TYPE_FRIENDS=1002;
 
+    //性别
+    public static final int GEBDER_MAN=1;//男
+    public static final int GENDER_WOMAN=0;//女
 }
