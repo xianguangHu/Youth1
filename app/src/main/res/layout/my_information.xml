@@ -1,7 +1,229 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<com.zhy.autolayout.AutoLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white">
 
-</LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#8a8a8a"/>
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="40px"
+        >
+
+        <ImageView
+            android:id="@+id/my_data_iv0"
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:src="@mipmap/my_data"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="50px"
+            android:layout_toRightOf="@+id/my_data_iv0"
+            android:text="我的资料"
+            android:textColor="#515151"
+
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="80px"
+            android:src="@mipmap/you"/>
+    </com.zhy.autolayout.AutoRelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="130px"
+        android:layout_marginRight="80px"
+        android:layout_marginTop="40px"
+        android:background="#707070"/>
+
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:padding="40px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:id="@+id/my_data_iv1"
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:src="@mipmap/phone_number"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="50px"
+            android:layout_toRightOf="@+id/my_data_iv1"
+            android:text="我的手机号"
+            android:textColor="#515151"
+
+            />
+
+        <ImageView
+            android:id="@+id/my_data_iv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="80px"
+            android:src="@mipmap/you"/>
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="138 **** 7100"
+            android:layout_toLeftOf="@+id/my_data_iv2"
+            android:layout_marginRight="40px"
+            android:textSize="45px"/>
+    </com.zhy.autolayout.AutoRelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="130px"
+        android:layout_marginRight="80px"
+        android:layout_marginTop="40px"
+        android:background="#707070"/>
+
+
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:padding="40px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:id="@+id/my_data_iv3"
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:src="@mipmap/email_number"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="50px"
+            android:layout_toRightOf="@+id/my_data_iv3"
+            android:text="我的邮箱"
+            android:textColor="#515151"
+
+            />
+
+        <ImageView
+            android:id="@+id/my_data_iv4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="80px"
+            android:src="@mipmap/you"/>
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15789762@qq.com"
+            android:layout_toLeftOf="@+id/my_data_iv4"
+            android:layout_marginRight="40px"
+            android:textSize="45px"/>
+    </com.zhy.autolayout.AutoRelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="40px"
+        android:background="#8a8a8a"/>
+
+
+    <View
+        android:background="#8eeeeeee"
+        android:layout_width="match_parent"
+        android:layout_height="100px"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#8a8a8a"/>
+    <com.zhy.autolayout.AutoRelativeLayout
+        android:padding="40px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:id="@+id/my_data_iv5"
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:src="@mipmap/updatepassword"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="50px"
+            android:layout_toRightOf="@+id/my_data_iv5"
+            android:text="修改密码"
+            android:textColor="#515151"
+
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="80px"
+            android:src="@mipmap/you"/>
+    </com.zhy.autolayout.AutoRelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="40px"
+        android:background="#707070"/>
+
+    <View
+        android:background="#8eeeeeee"
+        android:layout_width="match_parent"
+        android:layout_height="100px"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#8a8a8a"/>
+    <com.zhy.autolayout.AutoLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <TextView
+            android:padding="60px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="退出账号"/>
+    </com.zhy.autolayout.AutoLinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#8a8a8a"/>
+
+
+
+</com.zhy.autolayout.AutoLinearLayout>
