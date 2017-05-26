@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 public interface DynamicView extends MvpView{
-    void update2loadData(List<DynamicDateil> datas);
+    void update2loadData(List<DynamicDateil> datas,int type);
     void updateLike(int position);
     void getCacheSuccess(List<DynamicDateil> dynamicDateils);
 }

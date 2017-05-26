@@ -41,4 +41,7 @@ public class Constant {
     public static final int LOG_OUT_SHOW=0;
     public static final int LOG_OUT_NOSHOW=1;
 
+    //获取动态
+    public static final int DYNAMIC_LOAD=0;//下拉刷新
+    public static final int DYNAMIC_LOAD_MORE=1;//上拉加载更多
 }

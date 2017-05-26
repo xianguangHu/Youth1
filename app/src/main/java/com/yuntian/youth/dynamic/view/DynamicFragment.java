@@ -56,7 +56,7 @@ public class DynamicFragment extends MvpFragment<DynamicView,DynamicPresenter> i
 
     @Override
     public DynamicPresenter createPresenter() {
-        return new DynamicPresenter();
+        return new DynamicPresenter(getActivity());
     }
 
 
@@ -136,6 +136,7 @@ public class DynamicFragment extends MvpFragment<DynamicView,DynamicPresenter> i
         mDynamicRelatedPtr.setPtrHandler(new PtrDefaultHandler2() {
             @Override
             public void onLoadMoreBegin(PtrFrameLayout frame) {//底部加载
+                getPresenter().getData(Constant.DYNAMIC_LOAD_MORE);
                 Log.v("=====","上拉");
             }
 
@@ -143,7 +144,7 @@ public class DynamicFragment extends MvpFragment<DynamicView,DynamicPresenter> i
             public void onRefreshBegin(PtrFrameLayout frame) {//下拉加载
                 Log.v("=====","下拉");
 
-                getPresenter().getData(getActivity());
+                getPresenter().getData(Constant.DYNAMIC_LOAD);
 
             }
         });
@@ -165,14 +166,24 @@ public class DynamicFragment extends MvpFragment<DynamicView,DynamicPresenter> i
 
     //数据跟新完毕
     @Override
-    public void update2loadData(List<DynamicDateil> datas) {
+    public void update2loadData(List<DynamicDateil> datas,int type) {
         mDynamicRelatedPtr.refreshComplete();
         if (datas!=null){
-            mRecyclerAdapter.setDatas(datas);
+            if (Constant.DYNAMIC_LOAD==type){
+                mRecyclerAdapter.setDatas(datas);
+
+            }else if (Constant.DYNAMIC_LOAD_MORE==type){
+                mRecyclerAdapter.getDatas().addAll(datas);
+            }
+        }else {
+            //数据为空
+            Log.v("=======","数据位null");
         }
         mRecyclerAdapter.notifyDataSetChanged();
-        //数据显示完毕的时候将数据保存到本地数据库 防止断网的时候不显示数据
-        getPresenter().saveDynamicCachedata(datas,getActivity());
+        if (Constant.DYNAMIC_LOAD==type) {//只有在刷新的时候才会保存数据
+            //数据显示完毕的时候将数据保存到本地数据库 防止断网的时候不显示数据
+            getPresenter().saveDynamicCachedata(datas);
+        }
     }
 
     /**

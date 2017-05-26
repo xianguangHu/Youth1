@@ -20,6 +20,8 @@ public class GDReieveService {
         CloudSearch.SearchBound bound = new CloudSearch.SearchBound(new LatLonPoint(
                 latitude, longitude), 2000);
         CloudSearch.Query query=new CloudSearch.Query("58feb01b2376c11620d1ce62","",bound);
+        query.setPageNum(1);
+        query.setPageSize(10);
         cloudSearch.searchCloudAsyn(query);
     }
 

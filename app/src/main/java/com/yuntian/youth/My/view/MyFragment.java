@@ -8,31 +8,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 import com.yuntian.youth.My.presenter.MyPresenter;
-import com.yuntian.youth.My.service.MyService;
 import com.yuntian.youth.My.view.callback.MyView;
 import com.yuntian.youth.R;
-import com.yuntian.youth.Utils.DialogUtil;
 import com.yuntian.youth.Utils.ImageUtil;
 import com.yuntian.youth.global.Constant;
-import com.yuntian.youth.listener.impl.YouthListerenImpl;
 import com.yuntian.youth.register.model.bean.User;
-import com.zhy.autolayout.AutoLinearLayout;
-import com.zhy.autolayout.AutoRelativeLayout;
 
 import java.io.File;
 
@@ -49,47 +40,18 @@ import static android.app.Activity.RESULT_OK;
  * A simple {@link Fragment} subclass.
  */
 
-public class MyFragment extends MvpFragment<MyView, MyPresenter> implements MyView, AppBarLayout.OnOffsetChangedListener {
-
-    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.9f;
-    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
-    private static final int ALPHA_ANIMATIONS_DURATION = 200;
-    @BindView(R.id.my_fragment_username)
-    TextView mMyFragmentUsername;
-    @BindView(R.id.my_information_data)
-    AutoRelativeLayout mMyInformationData;
-    @BindView(R.id.my_data_phone_number)
-    AutoRelativeLayout mMyDataPhoneNumber;
-    @BindView(R.id.my_data_email)
-    AutoRelativeLayout mMyDataEmail;
-    @BindView(R.id.my_data_updatePassword)
-    AutoRelativeLayout mMyDataUpdatePassword;
-    @BindView(R.id.my_data_logOut)
-    AutoLinearLayout mMyDataLogOut;
-
-    private boolean mIsTheTitleVisible = false;
-    private boolean mIsTheTitleContainerVisible = true;
-
+public class MyFragment extends MvpFragment<MyView,MyPresenter> implements MyView{
     protected static final int CHOOSE_PICTURE = 0;//相册
     protected static final int TAKE_PICTURE = 1;//拍照
     private static final String path = "file:///sdcard/temp.jpg";
-    @BindView(R.id.my_fragment_linearlayout_detail)
-    AutoLinearLayout mMyFragmentLinearlayoutDetail;
-    @BindView(R.id.my_fragment_appbar)
-    AppBarLayout mMyFragmentAppbar;
-    @BindView(R.id.my_fragment_textview_title)
-    TextView mMyFragmentTextviewTitle;
 
-    Unbinder unbinder;
     @BindView(R.id.my_fragment_iv)
     ImageView mMyFragmentIv;
-    @BindView(R.id.my_fragment_toolbar)
-    Toolbar mMyFragmentToolbar;
+    Unbinder unbinder;
 
 
     private Uri mMTempUri;
     private Bitmap mPhoto;
-
     public MyFragment() {
         // Required empty public constructor
     }
@@ -106,14 +68,7 @@ public class MyFragment extends MvpFragment<MyView, MyPresenter> implements MyVi
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my, container, false);
         unbinder = ButterKnife.bind(this, view);
-        init();
         return view;
-    }
-
-    private void init() {
-        mMyFragmentAppbar.addOnOffsetChangedListener(this);
-        mMyFragmentToolbar.inflateMenu(R.menu.menu_main);
-        startAlphaAnimation(mMyFragmentTextviewTitle, 0, View.INVISIBLE);
     }
 
     @Override
@@ -124,60 +79,30 @@ public class MyFragment extends MvpFragment<MyView, MyPresenter> implements MyVi
 
     private void initView() {
         Uri uri = Uri.parse(User.getCurrentUser().getHeadUri());
-        if (uri != null) {
+        if (uri!=null) {
             Glide.with(getActivity()).load(uri).bitmapTransform(new CropCircleTransformation(getActivity())).into(mMyFragmentIv);
-        } else {
+        }else {
             Glide.with(getActivity()).load(R.mipmap.sms1).bitmapTransform(new CropCircleTransformation(getActivity())).into(mMyFragmentIv);
         }
-        String username = User.getCurrentUser().getUsername();
-        mMyFragmentTextviewTitle.setText(username);
-        mMyFragmentUsername.setText(username);
-
     }
 
-    @OnClick({R.id.my_fragment_iv, R.id.my_information_data, R.id.my_data_phone_number, R.id.my_data_email, R.id.my_data_updatePassword,R.id.my_data_logOut})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.my_fragment_iv:
-                //修改头像 弹出dialog
-                showChoosePicDialog();
-                break;
-
-            case R.id.my_information_data:
-                //编辑个人资料
-                Intent intent = new Intent(getActivity(), MyDataActivity.class);
-                getActivity().startActivity(intent);
-                break;
-            case R.id.my_data_phone_number:
-                //手机号
-                startActivity(new Intent(getActivity(), UpdatePhoneActivity.class));
-                break;
-            case R.id.my_data_email:
-                //邮箱
-                Toast.makeText(getActivity(), "邮箱功能尚未实现,敬请等待!", Toast.LENGTH_LONG).show();
-                break;
-
-            case R.id.my_data_updatePassword:
-                //修改密码
-                startActivity(new Intent(getActivity(), SecurityActivity.class));
-                break;
-            case R.id.my_data_logOut:
-                MyService.logOut(getActivity(),Constant.LOG_OUT_SHOW);
-                break;
-        }
-
+    @OnClick(R.id.my_fragment_iv)
+    public void onViewClicked() {
+        //修改头像 弹出dialog
+        showChoosePicDialog();
     }
-
     //
     private void showChoosePicDialog() {
-        String[] item = {"选择本地图像", "拍照"};
-        String title = "修改头像";
-        DialogUtil.showChoosePicDialog(getActivity(), item, title, new YouthListerenImpl() {
+        AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
+        builder.setTitle("修改头像");
+        String[] item={"选择本地图像","拍照"};
+        builder.setNegativeButton("取消",null);
+        builder.setItems(item, new DialogInterface.OnClickListener() {
             @Override
-            public void dialogCall(DialogInterface dialog, int which) {
-                switch (which) {
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
                     case CHOOSE_PICTURE://相册
-                        Log.v("相册", "===");
+                        Log.v("相册","===");
                         Intent local = new Intent(Intent.ACTION_GET_CONTENT);
                         local.setType("image/*");
                         startActivityForResult(local, CHOOSE_PICTURE);
@@ -194,6 +119,7 @@ public class MyFragment extends MvpFragment<MyView, MyPresenter> implements MyVi
                 }
             }
         });
+        builder.create().show();
     }
 
     @Override
@@ -219,13 +145,12 @@ public class MyFragment extends MvpFragment<MyView, MyPresenter> implements MyVi
             }
         }
     }
-
     void setImage2View(Intent data) {
         Bundle extras = data.getExtras();
         mPhoto = extras.getParcelable("data");
-        if (mPhoto != null) {
-            Bitmap[] bitmaps = {mPhoto};
-            getPresenter().uploadHead(bitmaps, getActivity());
+        if(mPhoto !=null){
+            Bitmap[] bitmaps={mPhoto};
+            getPresenter().uploadHead(bitmaps,getActivity());
 
         }
 
@@ -240,65 +165,4 @@ public class MyFragment extends MvpFragment<MyView, MyPresenter> implements MyVi
     public void Erro(String e) {
 
     }
-
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    public static void startAlphaAnimation(View view, long duration, int visibillity) {
-        AlphaAnimation alphaAnimation = (visibillity == View.VISIBLE)
-                ? new AlphaAnimation(0f, 1f)
-                : new AlphaAnimation(1f, 0f);
-        alphaAnimation.setDuration(duration);
-        alphaAnimation.setFillAfter(true);
-        view.startAnimation(alphaAnimation);
-    }
-
-
-    @Override
-    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-        int maxScroll = appBarLayout.getTotalScrollRange();
-        float percentage = Math.abs(verticalOffset) / maxScroll;
-        handleAlphaOnTitle(percentage);
-        handleToolbarTitleVisibility(percentage);
-
-
-    }
-
-    private void handleToolbarTitleVisibility(float percentage) {
-        if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
-
-            if (!mIsTheTitleVisible) {
-                startAlphaAnimation(mMyFragmentTextviewTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
-                mIsTheTitleVisible = true;
-            }
-
-        } else {
-
-            if (mIsTheTitleVisible) {
-                startAlphaAnimation(mMyFragmentTextviewTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
-                mIsTheTitleVisible = false;
-            }
-        }
-    }
-
-    private void handleAlphaOnTitle(float percentage) {
-        if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
-            if (mIsTheTitleContainerVisible) {
-                startAlphaAnimation(mMyFragmentLinearlayoutDetail, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
-                mIsTheTitleContainerVisible = false;
-            }
-
-        } else {
-            if (!mIsTheTitleContainerVisible) {
-                startAlphaAnimation(mMyFragmentLinearlayoutDetail, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
-                mIsTheTitleContainerVisible = true;
-            }
-        }
-
-    }
-
 }
