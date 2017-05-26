@@ -106,6 +106,7 @@
 
 
     <com.zhy.autolayout.AutoRelativeLayout
+        android:id="@+id/my_data_email"
         android:padding="40px"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -164,6 +165,7 @@
         android:layout_height="1px"
         android:background="#8a8a8a"/>
     <com.zhy.autolayout.AutoRelativeLayout
+        android:id="@+id/my_data_updatePassword"
         android:padding="40px"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -212,6 +214,7 @@
         android:layout_height="1px"
         android:background="#8a8a8a"/>
     <com.zhy.autolayout.AutoLinearLayout
+        android:id="@+id/my_data_logOut"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center">

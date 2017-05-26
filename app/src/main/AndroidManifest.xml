@@ -94,6 +94,7 @@
         <activity android:name=".My.view.MyDataActivity"/>
         <activity android:name=".My.view.UpdatePhoneActivity"/>
         <activity android:name=".My.view.ReplaceNunberActivity"/>
+        <activity android:name=".My.view.SecurityActivity"/>
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="08fc9565065bf5e99e2686db054651e5"/>

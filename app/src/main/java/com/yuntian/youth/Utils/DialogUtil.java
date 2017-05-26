@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,6 +13,9 @@ import android.widget.Toast;
 
 import com.yuntian.youth.listener.YouthListeren;
 import com.yuntian.youth.listener.impl.YouthListerenImpl;
+import com.yuntian.youth.register.view.RegisterActivity;
+
+import cn.bmob.v3.BmobUser;
 
 /**
  * Created by huxianguang on 2017/4/19.
@@ -83,7 +87,33 @@ public class DialogUtil {
         dialog.show();
     }
 
-
+    public static void showNormalDialog(final Context context){
+        /* @setIcon 设置对话框图标
+         * @setTitle 设置对话框标题
+         * @setMessage 设置对话框消息提示
+         * setXXX方法返回Dialog对象，因此可以链式设置属性
+         */
+        final AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(context);
+        normalDialog.setTitle("你确定要退出登陆吗？");
+        normalDialog.setPositiveButton("确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        BmobUser.logOut();
+                        context.startActivity(new Intent(context, RegisterActivity.class));
+                    }
+                });
+        normalDialog.setNegativeButton("关闭",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //...To-do
+                    }
+                });
+        // 显示
+        normalDialog.show();
+    }
 
 
 }

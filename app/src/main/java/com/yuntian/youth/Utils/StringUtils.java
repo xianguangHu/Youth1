@@ -42,4 +42,19 @@ public class StringUtils {
         }
         return true;
     }
+
+    /**
+     * 掩盖手机号码 如 12345678900 123 ****** 00
+     * @param phone
+     * @return
+     */
+    public static String encryptionPhone(String phone){
+        if (phone!=null&&phone.length()==11){
+            String str1=phone.substring(0,3);
+            String str2=phone.substring(phone.length()-2);
+            String newPhone=str1+" ****** "+str2;
+            return newPhone;
+        }
+        return null;
+    }
 }

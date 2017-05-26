@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 import com.yuntian.youth.R;
 import com.yuntian.youth.Utils.DialogUtil;
+import com.yuntian.youth.global.Constant;
 import com.yuntian.youth.mian.view.MainActivity;
 import com.yuntian.youth.register.presenter.RegisterPresenter;
 import com.yuntian.youth.register.view.callback.RegisterView;
@@ -88,6 +89,7 @@ public class RegisterActivity extends MvpActivity<RegisterView, RegisterPresente
         dissDialog(mDialog);
         Intent inten = new Intent(this, CheckActivity.class);
         inten.putExtra("phone", phone);
+        inten.putExtra("type", Constant.CODE_REGISTER);
         startActivity(inten);
     }
 

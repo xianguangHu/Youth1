@@ -117,7 +117,7 @@
             android:layout_marginRight="100px"
             android:layout_marginTop="70px"
             android:background="@drawable/blue_btn_style"
-            android:text="注册"
+            android:text="验证"
             android:textColor="#ffffff"
             android:textSize="70px"/>
 

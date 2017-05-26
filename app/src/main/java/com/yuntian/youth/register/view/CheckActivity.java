@@ -9,9 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
+import com.yuntian.youth.App;
 import com.yuntian.youth.R;
+import com.yuntian.youth.global.Constant;
+import com.yuntian.youth.register.model.bean.User;
 import com.yuntian.youth.register.presenter.CheckPresenter;
 import com.yuntian.youth.register.view.callback.CheckView;
 import com.yuntian.youth.widget.SecurityCodeView;
@@ -21,7 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CheckActivity extends MvpActivity<CheckView, CheckPresenter> implements InputCompleteListener,CheckView {
+public class CheckActivity extends MvpActivity<CheckView, CheckPresenter> implements InputCompleteListener, CheckView {
 
     @BindView(R.id.check_setphone)
     TextView mCheckSetphone;
@@ -36,6 +40,7 @@ public class CheckActivity extends MvpActivity<CheckView, CheckPresenter> implem
 
     private String SMSCode;
     private String mPhone;
+    private int mType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,7 @@ public class CheckActivity extends MvpActivity<CheckView, CheckPresenter> implem
         ButterKnife.bind(this);
         Intent intent = getIntent();
         mPhone = intent.getStringExtra("phone");
+        mType = intent.getIntExtra("type", 9);
         initView();
         setListener();
 
@@ -52,7 +58,7 @@ public class CheckActivity extends MvpActivity<CheckView, CheckPresenter> implem
     @NonNull
     @Override
     public CheckPresenter createPresenter() {
-        return new CheckPresenter();
+        return new CheckPresenter(this);
     }
 
     private void setListener() {
@@ -80,11 +86,21 @@ public class CheckActivity extends MvpActivity<CheckView, CheckPresenter> implem
             case R.id.check_return://返回
                 finish();
                 break;
-            case R.id.check_register:  //注册
+            case R.id.check_register:  //验证
                 mCheckErro.setVisibility(View.INVISIBLE);
                 if (!TextUtils.isEmpty(SMSCode)) {
-                    getPresenter().Register(mPhone, SMSCode.trim());
-                }else {
+                    if (mType==Constant.CODE_PASSWORD){
+                        Log.v("=====","重置密码");
+                        //验证成功  填写密码
+                        Intent intent = new Intent(this, RegisterDetailsActivity.class);
+                        intent.putExtra("phone", User.getCurrentUser().getMobilePhoneNumber());
+                        intent.putExtra("type",Constant.CODE_PASSWORD);
+                        intent.putExtra("code",SMSCode);
+                        startActivity(intent);
+                        return;
+                    }
+                    getPresenter().Register(mPhone, SMSCode.trim(),mType);
+                } else {
                     mCheckErro.setText("验证码不足6位!");
                     mCheckErro.setVisibility(View.VISIBLE);
                 }
@@ -102,9 +118,17 @@ public class CheckActivity extends MvpActivity<CheckView, CheckPresenter> implem
 
     @Override
     public void Success() {
-        //验证成功  填写用户相关信息 登陆
-        Intent intent=new Intent(this,RegisterDetailsActivity.class);
-        intent.putExtra("phone",mPhone);
-        startActivity(intent);
+        if (mType == Constant.CODE_REGISTER) {//说明是注册  通过验证登陆
+            //验证成功  填写密码
+            Log.v("=====","注册");
+            Intent intent = new Intent(this, RegisterDetailsActivity.class);
+            intent.putExtra("phone", mPhone);
+            intent.putExtra("type",Constant.CODE_REGISTER);
+            startActivity(intent);
+        } else if (mType == Constant.CODE_REPLACE) {//说明更改手机验证通过
+            Log.v("=====","更改手机号");
+            Toast.makeText(App.getContext(),"手机号更改成功",Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
 }

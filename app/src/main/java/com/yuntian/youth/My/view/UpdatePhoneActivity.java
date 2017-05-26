@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.yuntian.youth.R;
+import com.yuntian.youth.Utils.StringUtils;
 import com.yuntian.youth.Utils.stausbar.StatusBarCompat;
 import com.yuntian.youth.register.model.bean.User;
 import com.yuntian.youth.widget.TitleBar;
@@ -46,9 +47,7 @@ public class UpdatePhoneActivity extends Activity {
         initTitle();
         User user=User.getCurrentUser();
         String number=user.getMobilePhoneNumber();
-        String str1=number.substring(0,3);
-        String str2=number.substring(number.length()-2);
-        String newNumber=str1+" ****** "+str2;
+        String newNumber= StringUtils.encryptionPhone(number);
         mUpdatePhoneNumber.setText(newNumber);
     }
 

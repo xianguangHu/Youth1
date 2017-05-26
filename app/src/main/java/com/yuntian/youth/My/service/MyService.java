@@ -1,9 +1,14 @@
 package com.yuntian.youth.My.service;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.yuntian.youth.My.model.File;
+import com.yuntian.youth.Utils.DialogUtil;
+import com.yuntian.youth.global.Constant;
 import com.yuntian.youth.register.model.bean.User;
+import com.yuntian.youth.register.view.RegisterActivity;
 
 import java.util.List;
 
@@ -81,5 +86,20 @@ public class MyService {
                 }
             });
         }
+    }
+
+    /**
+     * 退出登陆
+     * @param context
+     * @param type
+     */
+    public static void logOut(Context context,int type){
+        if (Constant.LOG_OUT_SHOW==type){//需要显示dialog
+            DialogUtil.showNormalDialog(context);
+            return;
+        }
+        BmobUser.logOut();
+        context.startActivity(new Intent(context, RegisterActivity.class));
+
     }
 }

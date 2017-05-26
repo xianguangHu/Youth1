@@ -31,4 +31,14 @@ public class Constant {
     //性别
     public static final int GEBDER_MAN=1;//男
     public static final int GENDER_WOMAN=0;//女
+
+    //注册和更换手机号  在验证码页面用到
+    public static final int CODE_REGISTER=0;//注册
+    public static final int CODE_REPLACE=1;//更换手机号
+    public static final int CODE_PASSWORD=2;//修改密码
+
+    //退出登陆
+    public static final int LOG_OUT_SHOW=0;
+    public static final int LOG_OUT_NOSHOW=1;
+
 }

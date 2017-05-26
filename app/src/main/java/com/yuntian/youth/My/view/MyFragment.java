@@ -18,10 +18,12 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 import com.yuntian.youth.My.presenter.MyPresenter;
+import com.yuntian.youth.My.service.MyService;
 import com.yuntian.youth.My.view.callback.MyView;
 import com.yuntian.youth.R;
 import com.yuntian.youth.Utils.DialogUtil;
@@ -58,6 +60,12 @@ public class MyFragment extends MvpFragment<MyView, MyPresenter> implements MyVi
     AutoRelativeLayout mMyInformationData;
     @BindView(R.id.my_data_phone_number)
     AutoRelativeLayout mMyDataPhoneNumber;
+    @BindView(R.id.my_data_email)
+    AutoRelativeLayout mMyDataEmail;
+    @BindView(R.id.my_data_updatePassword)
+    AutoRelativeLayout mMyDataUpdatePassword;
+    @BindView(R.id.my_data_logOut)
+    AutoLinearLayout mMyDataLogOut;
 
     private boolean mIsTheTitleVisible = false;
     private boolean mIsTheTitleContainerVisible = true;
@@ -127,7 +135,7 @@ public class MyFragment extends MvpFragment<MyView, MyPresenter> implements MyVi
 
     }
 
-    @OnClick({R.id.my_fragment_iv, R.id.my_information_data,R.id.my_data_phone_number})
+    @OnClick({R.id.my_fragment_iv, R.id.my_information_data, R.id.my_data_phone_number, R.id.my_data_email, R.id.my_data_updatePassword,R.id.my_data_logOut})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.my_fragment_iv:
@@ -142,7 +150,19 @@ public class MyFragment extends MvpFragment<MyView, MyPresenter> implements MyVi
                 break;
             case R.id.my_data_phone_number:
                 //手机号
-                startActivity(new Intent(getActivity(),UpdatePhoneActivity.class));
+                startActivity(new Intent(getActivity(), UpdatePhoneActivity.class));
+                break;
+            case R.id.my_data_email:
+                //邮箱
+                Toast.makeText(getActivity(), "邮箱功能尚未实现,敬请等待!", Toast.LENGTH_LONG).show();
+                break;
+
+            case R.id.my_data_updatePassword:
+                //修改密码
+                startActivity(new Intent(getActivity(), SecurityActivity.class));
+                break;
+            case R.id.my_data_logOut:
+                MyService.logOut(getActivity(),Constant.LOG_OUT_SHOW);
                 break;
         }
 

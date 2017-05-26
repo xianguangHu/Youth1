@@ -9,15 +9,17 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
-import com.yuntian.youth.My.presenter.ReplaceNumberPresenter;
-import com.yuntian.youth.My.view.callback.ReplaceNumberView;
+import com.yuntian.youth.My.presenter.SecurityPresenter;
+import com.yuntian.youth.My.view.callback.SecurityView;
 import com.yuntian.youth.R;
+import com.yuntian.youth.Utils.StringUtils;
 import com.yuntian.youth.Utils.stausbar.StatusBarCompat;
 import com.yuntian.youth.global.Constant;
+import com.yuntian.youth.register.model.bean.User;
 import com.yuntian.youth.register.view.CheckActivity;
 import com.yuntian.youth.widget.TitleBar;
 
@@ -29,63 +31,66 @@ import butterknife.OnClick;
  * Created by huxianguang on 2017/5/24.
  */
 
-public class ReplaceNunberActivity extends MvpActivity<ReplaceNumberView,ReplaceNumberPresenter> implements ReplaceNumberView {
-    @BindView(R.id.replace_number_title)
-    TitleBar mReplaceNumberTitle;
-    @BindView(R.id.replace_number_editview)
-    EditText mReplaceNumberEditview;
-    @BindView(R.id.replace_number_next)
-    Button mReplaceNumberNext;
+public class SecurityActivity extends MvpActivity<SecurityView,SecurityPresenter> implements SecurityView {
+
+    @BindView(R.id.security_title)
+    TitleBar mSecurityTitle;
+    @BindView(R.id.security_phone)
+    TextView mSecurityPhone;
+    @BindView(R.id.security_sendSms)
+    Button mSecuritySendSms;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_replace_number);
+        setContentView(R.layout.activity_security);
         ButterKnife.bind(this);
         StatusBarCompat.setStatusBarColor(false, this, getColor(R.color.green_main));
         initView();
+
     }
 
     @NonNull
     @Override
-    public ReplaceNumberPresenter createPresenter() {
-        return new ReplaceNumberPresenter(this);
+    public SecurityPresenter createPresenter() {
+        return new SecurityPresenter(this);
     }
 
     private void initView() {
         initTitle();
+        mSecurityPhone.setText(StringUtils.encryptionPhone(User.getCurrentUser().getMobilePhoneNumber()));
     }
 
     private void initTitle() {
-        mReplaceNumberTitle.setLeftImageResource(R.mipmap.left);
-        mReplaceNumberTitle.setLeftClickListener(new View.OnClickListener() {
+        mSecurityTitle.setLeftImageResource(R.mipmap.left);
+        mSecurityTitle.setLeftClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        mReplaceNumberTitle.setTitle("更换手机号码");
-        mReplaceNumberTitle.setTitleColor(Color.WHITE);
+        mSecurityTitle.setTitle("安全验证");
+        mSecurityTitle.setTitleColor(Color.WHITE);
     }
 
-    @OnClick(R.id.replace_number_next)
+    @OnClick(R.id.security_sendSms)
     public void onViewClicked() {
-        String number=mReplaceNumberEditview.getText().toString().trim();
-        getPresenter().sendSMS(number);
+        //发送验证码
+        getPresenter().sendSms();
     }
 
     @Override
-    public void Success(String phone) {
-        //已向号码发送验证码  跳到验证页
+    public void Success() {
+        //跳到验证页面
         Intent intent=new Intent(this, CheckActivity.class);
-        intent.putExtra("phone",phone);
-        intent.putExtra("type", Constant.CODE_REPLACE);
+        intent.putExtra("phone",User.getCurrentUser().getMobilePhoneNumber());
+        intent.putExtra("type", Constant.CODE_PASSWORD);
         startActivity(intent);
     }
 
     @Override
     public void Erro(String erro) {
-        Toast.makeText(this,erro,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,erro,Toast.LENGTH_LONG).show();
     }
 }
